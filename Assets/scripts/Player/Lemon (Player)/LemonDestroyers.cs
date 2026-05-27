@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LemonDestroyer : MonoBehaviour
+public class LemonDestroyers : MonoBehaviour
 {
     [Header("Nombre base del objeto a destruir")]
     [SerializeField] private string bossName = "Lemon (Boss)";
