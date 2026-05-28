@@ -1,18 +1,32 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// Es el encargado de las referencias del prefab, lugar de spawn y sus propiedades del proyectil.
+/// <summary>
+/// Maneja el disparo del jugador con un solo botón (Input System):
+/// - Toque rápido: disparo normal (prefab normal).
+/// - Mantener presionado >= chargeTime: ataque cargado (prefab distinto, más daño y velocidad).
+/// El tipo de disparo se decide al SOLTAR el botón, para que no se solapen.
+/// </summary>
 public class LemonShoot : MonoBehaviour
 {
     [Header("Referencias")]
+    [Tooltip("Prefab del disparo normal.")]
     [SerializeField] private LemonProjectile projectilePrefab;
+    [Tooltip("Prefab del ataque cargado (diferente al normal).")]
+    [SerializeField] private LemonProjectile chargedProjectilePrefab;
     [SerializeField] private Transform shootPoint;
     [SerializeField] private GameObject globalImmuneObject;
 
-    [Header("Configuración del disparo")]
+    [Header("Configuración del disparo normal")]
     [SerializeField] private float fireCooldown = 0.5f;
     [SerializeField] private int projectileDamage = 1;
     [SerializeField] private float projectileSpeed = 20f;
+
+    [Header("Configuración del ataque cargado")]
+    [Tooltip("Segundos que hay que mantener el botón para que sea ataque cargado.")]
+    [SerializeField] private float chargeTime = 1.5f;
+    [SerializeField] private int chargedDamage = 3;
+    [SerializeField] private float chargedSpeed = 30f;
 
     [Tooltip("Dirección de disparo en el espacio local del shootPoint")]
     [SerializeField] private Vector3 fireDirection = Vector3.left;
@@ -21,6 +35,8 @@ public class LemonShoot : MonoBehaviour
     [SerializeField] private InputActionReference shoot;
 
     private float nextAllowedFireTime;
+    private float holdStartTime = -1f;
+    private bool isCharging;
 
     public void Configure(LemonProjectile newProjectilePrefab, Transform newShootPoint)
     {
@@ -49,9 +65,32 @@ public class LemonShoot : MonoBehaviour
         if (shoot == null || shoot.action == null)
             return;
 
-        if (shoot.action.WasPressedThisFrame() && CanFire())
+        // Empezó a presionar: arranca a contar la carga.
+        if (shoot.action.WasPressedThisFrame())
         {
-            Fire();
+            holdStartTime = Time.time;
+            isCharging = true;
+        }
+
+        // Soltó el botón: decide si fue disparo normal o cargado.
+        if (shoot.action.WasReleasedThisFrame() && isCharging)
+        {
+            float heldDuration = Time.time - holdStartTime;
+            isCharging = false;
+
+            if (!CanFire())
+                return;
+
+            if (heldDuration >= chargeTime)
+            {
+                // Ataque cargado: prefab distinto, más daño y velocidad.
+                Fire(chargedProjectilePrefab, chargedDamage, chargedSpeed);
+            }
+            else
+            {
+                // Disparo normal.
+                Fire(projectilePrefab, projectileDamage, projectileSpeed);
+            }
         }
     }
 
@@ -60,11 +99,14 @@ public class LemonShoot : MonoBehaviour
         return Time.time >= nextAllowedFireTime;
     }
 
-    private void Fire()
+    /// <summary>
+    /// Instancia y lanza el proyectil indicado con el daño y velocidad dados.
+    /// </summary>
+    private void Fire(LemonProjectile prefab, int damage, float speed)
     {
-        if (projectilePrefab == null)
+        if (prefab == null)
         {
-            Debug.LogWarning("LemonShoot necesita projectilePrefab asignado en el Inspector.");
+            Debug.LogWarning("LemonShoot: falta asignar el prefab del proyectil en el Inspector.");
             return;
         }
 
@@ -73,8 +115,7 @@ public class LemonShoot : MonoBehaviour
 
         nextAllowedFireTime = Time.time + fireCooldown;
 
-        LemonProjectile projectile = Instantiate(projectilePrefab, spawnPos, spawnRot);
-
+        LemonProjectile projectile = Instantiate(prefab, spawnPos, spawnRot);
         projectile.SetOwner(transform);
         projectile.SetImmuneObject(globalImmuneObject);
 
@@ -82,6 +123,6 @@ public class LemonShoot : MonoBehaviour
             ? shootPoint.TransformDirection(fireDirection)
             : fireDirection;
 
-        projectile.Launch(direction, projectileSpeed, projectileDamage);
+        projectile.Launch(direction, speed, damage);
     }
 }

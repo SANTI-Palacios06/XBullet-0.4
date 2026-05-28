@@ -9,6 +9,8 @@ public class LemonProjectile : MonoBehaviour
     [SerializeField] private float lifeTime = 2f;
 
     [Header("Movimiento")]
+    [Tooltip("Velocidad por defecto. LemonShoot puede sobrescribirla al disparar.")]
+    [SerializeField] private float defaultSpeed = 20f;
     [Tooltip("Deriva leve en el eje Z mientras viaja.")]
     [SerializeField] private float zDrift = 0.5f;
 
@@ -28,6 +30,7 @@ public class LemonProjectile : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        travelSpeed = defaultSpeed; // Arranca con la velocidad del Inspector.
     }
 
     // Llamado del proyectil frame por frame
