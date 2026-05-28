@@ -1,8 +1,5 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
-
 
 /// Es el encargado de las referencias del prefab, lugar de spawn y sus propiedades del proyectil.
 public class LemonShoot : MonoBehaviour
@@ -16,12 +13,12 @@ public class LemonShoot : MonoBehaviour
     [SerializeField] private float fireCooldown = 0.5f;
     [SerializeField] private int projectileDamage = 1;
     [SerializeField] private float projectileSpeed = 20f;
+
     [Tooltip("Dirección de disparo en el espacio local del shootPoint")]
     [SerializeField] private Vector3 fireDirection = Vector3.left;
 
     [Header("Input")]
-    [SerializeField] private string fireButtonName = "Fire1";
-    [SerializeField] private KeyCode legacyFireKey = KeyCode.F;
+    [SerializeField] private InputActionReference shoot;
 
     private float nextAllowedFireTime;
 
@@ -31,27 +28,31 @@ public class LemonShoot : MonoBehaviour
         shootPoint = newShootPoint;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (WantsToFire() && CanFire())
+        if (shoot != null && shoot.action != null)
         {
-            Fire();
+            shoot.action.Enable();
         }
     }
 
-//asignacion de Inputs del disparo
-    private bool WantsToFire()
+    private void OnDisable()
     {
-        bool wantsToFire = false;
-#if ENABLE_INPUT_SYSTEM
-        wantsToFire |= Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame;
-        wantsToFire |= Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
-        wantsToFire |= Gamepad.current != null && Gamepad.current.rightShoulder.wasPressedThisFrame;
-#endif
-#if ENABLE_LEGACY_INPUT_MANAGER
-        wantsToFire |= Input.GetButtonDown(fireButtonName) || Input.GetKeyDown(legacyFireKey);
-#endif
-        return wantsToFire;
+        if (shoot != null && shoot.action != null)
+        {
+            shoot.action.Disable();
+        }
+    }
+
+    private void Update()
+    {
+        if (shoot == null || shoot.action == null)
+            return;
+
+        if (shoot.action.WasPressedThisFrame() && CanFire())
+        {
+            Fire();
+        }
     }
 
     private bool CanFire()
@@ -59,7 +60,6 @@ public class LemonShoot : MonoBehaviour
         return Time.time >= nextAllowedFireTime;
     }
 
-//Se encarga del manejo del disparo. verificando prefab, velocidad posisiconamiento, objeto inmune y cooldown
     private void Fire()
     {
         if (projectilePrefab == null)
@@ -74,6 +74,7 @@ public class LemonShoot : MonoBehaviour
         nextAllowedFireTime = Time.time + fireCooldown;
 
         LemonProjectile projectile = Instantiate(projectilePrefab, spawnPos, spawnRot);
+
         projectile.SetOwner(transform);
         projectile.SetImmuneObject(globalImmuneObject);
 
