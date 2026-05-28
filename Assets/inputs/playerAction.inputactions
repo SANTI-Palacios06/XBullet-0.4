@@ -1,0 +1,98 @@
+{
+    "version": 1,
+    "name": "playerAction",
+    "maps": [
+        {
+            "name": "PlayerMovement",
+            "id": "e980a10e-da64-4cfd-a5ed-d6d8c4c7aafb",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "9a1fb384-bd1f-4beb-9751-3b4713631f00",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "shoot",
+                    "type": "Button",
+                    "id": "8f71a6a9-f5fe-4352-bc8e-8548d60976e6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "charge shoot",
+                    "type": "Button",
+                    "id": "abb97e04-7233-425c-8ee3-c1d9b1a41702",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2290f9f2-625d-4704-98c8-007b1448f8d6",
+                    "path": "<XInputController>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Xbox",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ca81dffc-5efc-4321-8d4b-abdccb1a2990",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Xbox",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a1cfacd8-84a6-4cce-b9f6-b8205e619015",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Xbox",
+                    "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3d457813-890d-4627-8b2e-27b844ceae8c",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "charge shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Xbox",
+            "bindingGroup": "Xbox",
+            "devices": [
+                {
+                    "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

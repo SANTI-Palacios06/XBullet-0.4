@@ -133,6 +133,9 @@ GameObject:
   - component: {fileID: 20262578}
   - component: {fileID: 20262577}
   - component: {fileID: 20262582}
+  - component: {fileID: 20262585}
+  - component: {fileID: 20262584}
+  - component: {fileID: 20262583}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -250,7 +253,7 @@ Transform:
   m_GameObject: {fileID: 20262576}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.0031455725, z: 0, w: 0.9999951}
-  m_LocalPosition: {x: -0.296, y: 1.988, z: 0.352}
+  m_LocalPosition: {x: -0.296, y: 1.5, z: -2.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -273,13 +276,82 @@ MonoBehaviour:
   projectilePrefab: {fileID: 581443623}
   shootPoint: {fileID: 1360996760}
   globalImmuneObject: {fileID: 20262576}
-  fireCooldown: 0
+  fireCooldown: 0.5
   projectileDamage: 1
   projectileSpeed: 20
   fireDirection: {x: 0, y: 0, z: 1}
-  fireButtonName: Fire1
-  legacyFireKey: 102
-  gamepadFireKey: 335
+  shoot: {fileID: -7972229825230312756, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
+--- !u!114 &20262583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20262576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a4fdd708e67f6489a2b515b1878348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement2D
+  move: {fileID: -2476755247546768021, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
+  moveSpeed: 5
+--- !u!114 &20262584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20262576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Xbox
+  m_DefaultActionMap: PlayerMovement
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!54 &20262585
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20262576}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &397943959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -294,7 +366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalPosition.y
@@ -302,7 +374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalRotation.w
