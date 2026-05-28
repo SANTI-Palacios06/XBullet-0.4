@@ -60,19 +60,15 @@ public class BossShoot : MonoBehaviour
         switch (index)
         {
             case 0:
-                Debug.Log("🔄 Patrón: Classic Spiral");
                 ShootClassicSpiral();
                 break;
             case 1:
-                Debug.Log("🔄 Patrón: Rosette");
                 ShootRosettePattern();
                 break;
             case 2:
-                Debug.Log("🔄 Patrón: Segmented Flower");
                 ShootSegmentedFlower();
                 break;
             case 3:
-                Debug.Log("🔄 Patrón: Helical Fan");
                 ShootHelicalFan();
                 break;
         }
