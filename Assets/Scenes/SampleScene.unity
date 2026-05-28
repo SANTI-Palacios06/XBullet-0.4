@@ -274,11 +274,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LemonShoot
   projectilePrefab: {fileID: 581443623}
+  chargedProjectilePrefab: {fileID: 3583492582976474303, guid: c8ab97926cecc994bada85202916b128, type: 3}
   shootPoint: {fileID: 1360996760}
   globalImmuneObject: {fileID: 20262576}
   fireCooldown: 0.5
   projectileDamage: 1
   projectileSpeed: 20
+  chargeTime: 1
+  chargedDamage: 3
+  chargedSpeed: 30
   fireDirection: {x: 0, y: 0, z: 1}
   shoot: {fileID: -7972229825230312756, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
 --- !u!114 &20262583
