@@ -153,8 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a423be806474e4dbf8c5d47fee2f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LemonProjectile
-  lifeTime: 2
+  lifeTime: 10
+  defaultSpeed: 20
   zDrift: 0.5
   destroyOnContactLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  enemyProjectileTag: EnemyProjectile
+  destroySelfOnIntercept: 1

@@ -1,12 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
 /// Maneja el disparo del jugador con un solo botón (Input System):
-/// - Toque rápido: disparo normal (prefab normal).
-/// - Mantener presionado >= chargeTime: ataque cargado (prefab distinto, más daño y velocidad).
-/// El tipo de disparo se decide al SOLTAR el botón, para que no se solapen.
-/// </summary>
 public class LemonShoot : MonoBehaviour
 {
     [Header("Referencias")]
@@ -34,10 +29,12 @@ public class LemonShoot : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference shoot;
 
+//
     private float nextAllowedFireTime;
     private float holdStartTime = -1f;
     private bool isCharging;
 
+//Configura el punto de disparo del disparo
     public void Configure(LemonProjectile newProjectilePrefab, Transform newShootPoint)
     {
         projectilePrefab = newProjectilePrefab;
@@ -99,9 +96,7 @@ public class LemonShoot : MonoBehaviour
         return Time.time >= nextAllowedFireTime;
     }
 
-    /// <summary>
     /// Instancia y lanza el proyectil indicado con el daño y velocidad dados.
-    /// </summary>
     private void Fire(LemonProjectile prefab, int damage, float speed)
     {
         if (prefab == null)
