@@ -30,6 +30,7 @@ public class PlayerMovement2D : MonoBehaviour
             move.action.Disable();
     }
 
+//Actualiza el movimiento
     private void Update()
     {
         if (!isActive)
@@ -52,7 +53,7 @@ public class PlayerMovement2D : MonoBehaviour
     {
         isActive = true;
     }
-
+//Desactiva todo movimiento 
     public void DeactivateMovement()
     {
         isActive = false;
@@ -60,6 +61,7 @@ public class PlayerMovement2D : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
     }
 
+//Se reinicia el movimiento
     public void ResetMovement()
     {
         isActive = true;

@@ -50,21 +50,18 @@ public class EvilLemonProjectile : MonoBehaviour
     // Trigger en vez de colisión física: detecta el contacto pero NO empuja al jugador.
     private void OnTriggerEnter(Collider other)
     {
-        // El objeto inmune (el propio jefe, normalmente) no destruye la bala.
+        // El objeto inmune (el propio jefe) no destruye la bala.
         if (inmuneObject != null && other.gameObject == inmuneObject)
-        {
             return;
-        }
 
-        // Si tocó al jugador: daño al jugador.
+        // Si tocó al jugador: aplica daño vía IDamageable.
         if (other.CompareTag(playerTag))
         {
-            Debug.Log($"💥 Bala golpeó al Player (daño preparado: {damage}).");
-
-            //Se ecnargara del daño cuando el sistema exista
+            IDamageable player = other.GetComponent<IDamageable>();
+            if (player != null)
+            {
+                player.TakeDamage(damage);
+            }
         }
-
-        // Desaparece al tocar cualquier cosa, sin empujar (trigger).
-        Destroy(gameObject);
     }
 }
