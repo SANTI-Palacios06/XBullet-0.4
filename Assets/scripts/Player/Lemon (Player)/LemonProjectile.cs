@@ -66,22 +66,30 @@ public class LemonProjectile : MonoBehaviour
 
 //Maneja el contacto del proyectil, su interraccion y destruccion. tambien maneja la destruccion del enemigo 
     private void HandleContact(GameObject other)
-    {
-        if (!wasLaunched) return;
-        if (immuneObject != null && other == immuneObject) return;
-        if (IsOwnerOrOwnerChild(other.transform)) return;
-        if (!string.IsNullOrEmpty(enemyProjectileTag) && other.CompareTag(enemyProjectileTag))
-        {
-            Destroy(other);
-            if (destroySelfOnIntercept) Destroy(gameObject);
-            return;
-        }
+{
+    if (!wasLaunched) return;
+    if (immuneObject != null && other == immuneObject) return;
+    if (IsOwnerOrOwnerChild(other.transform)) return;
 
-        if (IsInLayerMask(other.layer, destroyOnContactLayers))
-        {
-            Destroy(gameObject);
-        }
+    if (!string.IsNullOrEmpty(enemyProjectileTag) && other.CompareTag(enemyProjectileTag))
+    {
+        Destroy(other);
+        if (destroySelfOnIntercept) Destroy(gameObject);
+        return;
     }
+
+    
+    IDamageable target = other.GetComponent<IDamageable>();
+    if (target != null)
+    {
+        target.TakeDamage(damage);
+    }
+
+    if (IsInLayerMask(other.layer, destroyOnContactLayers))
+    {
+        Destroy(gameObject);
+    }
+}
 
     private bool IsInLayerMask(int layer, LayerMask layerMask)
     {
