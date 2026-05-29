@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lemon (evil)
       objectReference: {fileID: 0}
+    - target: {fileID: 2961150603677758860, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
+      propertyPath: m_TagString
+      value: EnemyProjectile
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9024691948201622208, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
     m_RemovedGameObjects: []

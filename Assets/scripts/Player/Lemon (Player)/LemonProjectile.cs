@@ -1,22 +1,25 @@
 using UnityEngine;
 
-/// Proyectil del jugador: dicta su movimiento y su autodestrucción
+//Manejo del proyectil, maneja su impacti, movimiento, direccion, impacto, interraccion con proyectil enemigo y gvelocidad
+
 [RequireComponent(typeof(Rigidbody))]
 public class LemonProjectile : MonoBehaviour
 {
     [Header("Tiempo de vida")]
-    [Tooltip("Segundos antes de destruirse si no choca con nada.")]
     [SerializeField] private float lifeTime = 2f;
 
     [Header("Movimiento")]
-    [Tooltip("Velocidad por defecto. LemonShoot puede sobrescribirla al disparar.")]
     [SerializeField] private float defaultSpeed = 20f;
-    [Tooltip("Deriva leve en el eje Z mientras viaja.")]
     [SerializeField] private float zDrift = 0.5f;
 
     [Header("Reglas de impacto")]
-    [Tooltip("Layers que destruyen este proyectil al chocar.")]
     [SerializeField] private LayerMask destroyOnContactLayers;
+
+    [Header("Intercepción de proyectiles enemigos")]
+    [Tooltip("Tag que deben tener los proyectiles enemigos para ser destruidos al contacto.")]
+    [SerializeField] private string enemyProjectileTag = "EnemyProjectile";
+    [Tooltip("Si es true, este proyectil también se destruye al interceptar uno enemigo.")]
+    [SerializeField] private bool destroySelfOnIntercept = true;
 
     private Rigidbody rb;
     private Transform owner;
@@ -26,18 +29,15 @@ public class LemonProjectile : MonoBehaviour
     private float travelSpeed;
     private bool wasLaunched;
 
-    // Creación del objeto
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        travelSpeed = defaultSpeed; // Arranca con la velocidad del Inspector.
+        travelSpeed = defaultSpeed;
     }
 
-    // Llamado del proyectil frame por frame
     private void Update()
     {
         if (!wasLaunched) return;
-
         Vector3 movement = (travelDirection * travelSpeed + Vector3.forward * zDrift) * Time.deltaTime;
         transform.position += movement;
     }
@@ -46,7 +46,7 @@ public class LemonProjectile : MonoBehaviour
     public void SetOwner(Transform newOwner) => owner = newOwner;
     public void SetImmuneObject(GameObject obj) => immuneObject = obj;
 
-    // Configuración del lanzamiento del proyectil: daño fijo, velocidad, autodestrucción y dirección
+//Velocidad de lanzamiento del proyectil
     public void Launch(Vector3 direction, float speed, int projectileDamage)
     {
         damage = projectileDamage;
@@ -60,16 +60,22 @@ public class LemonProjectile : MonoBehaviour
     public int Damage => damage;
     public Transform Owner => owner;
 
-    // Detección de colisiones
     private void OnTriggerEnter(Collider other) => HandleContact(other.gameObject);
     private void OnCollisionEnter(Collision collision) => HandleContact(collision.gameObject);
 
-    // Maneja el control de colisiones del objeto al tocar
+
+//Maneja el contacto del proyectil, su interraccion y destruccion. tambien maneja la destruccion del enemigo 
     private void HandleContact(GameObject other)
     {
         if (!wasLaunched) return;
         if (immuneObject != null && other == immuneObject) return;
         if (IsOwnerOrOwnerChild(other.transform)) return;
+        if (!string.IsNullOrEmpty(enemyProjectileTag) && other.CompareTag(enemyProjectileTag))
+        {
+            Destroy(other);
+            if (destroySelfOnIntercept) Destroy(gameObject);
+            return;
+        }
 
         if (IsInLayerMask(other.layer, destroyOnContactLayers))
         {
@@ -82,7 +88,6 @@ public class LemonProjectile : MonoBehaviour
         return (layerMask.value & (1 << layer)) != 0;
     }
 
-    // Verifica la familia del objeto tocado para ver si es hijo o padre
     private bool IsOwnerOrOwnerChild(Transform other)
     {
         if (owner == null || other == null) return false;
