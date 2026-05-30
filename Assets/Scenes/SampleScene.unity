@@ -372,7 +372,7 @@ MonoBehaviour:
   displayName: Objetivo
   maxHealth: 4
   currentHealth: 4
-  quitOnDeath: 1
+  quitOnDeath: 0
   quitDelay: 3
 --- !u!1001 &397943959
 PrefabInstance:
@@ -835,6 +835,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 31.86, y: 218, z: 0}
+--- !u!1 &1120615128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1120615130}
+  - component: {fileID: 1120615129}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1120615129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120615128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acda21eaee3bd274289b5f1db5d4f6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MusicManager
+  musicByScene:
+  - {fileID: 8300000, guid: 9c76c1d5a6f22b0448b794c8a608f2d5, type: 3}
+--- !u!4 &1120615130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120615128}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.56353, y: 1.00937, z: -1.14821}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1360996759
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,3 +983,4 @@ SceneRoots:
   - {fileID: 1535763757}
   - {fileID: 581443617}
   - {fileID: 20262581}
+  - {fileID: 1120615130}
