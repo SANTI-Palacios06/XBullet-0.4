@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Sounds SO 1
   m_EditorClassIdentifier: Assembly-CSharp::SoundSO
-  sounds: []
+  sounds:
+  - name: 
+    volume: 0
+    mixer: {fileID: 0}
+    sounds: []
+  - name: 
+    volume: 1
+    mixer: {fileID: 0}
+    sounds:
+    - {fileID: 8300000, guid: e003e7984eceb4d4a8e387a225fe4b79, type: 3}
