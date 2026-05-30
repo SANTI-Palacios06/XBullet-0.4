@@ -10,6 +10,7 @@ public class MusicManager : MonoBehaviour
 
     private AudioSource audioSource;
 
+// Se encarga de reproducir la música.
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,6 +29,7 @@ public class MusicManager : MonoBehaviour
         audioSource.playOnAwake  = false;
     }
 
+// Se encarga de cargar la música al entrar en una escena.
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -38,6 +40,7 @@ public class MusicManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+// Se encarga de gestionar la música entre escenas.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (musicByScene == null || scene.buildIndex >= musicByScene.Length)
@@ -51,6 +54,7 @@ public class MusicManager : MonoBehaviour
             StopMusic();
     }
 
+// Se encarga de cargar y reproducir la música seleccionada.
     public void PlayMusic(AudioClip clip)
     {
         if (audioSource.clip == clip && audioSource.isPlaying)
