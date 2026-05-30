@@ -67,6 +67,7 @@ public class LemonShoot : MonoBehaviour
         {
             holdStartTime = Time.time;
             isCharging = true;
+            SoundManager.StartChargeSound();
         }
 
         // Soltó el botón: decide si fue disparo normal o cargado.
@@ -74,6 +75,7 @@ public class LemonShoot : MonoBehaviour
         {
             float heldDuration = Time.time - holdStartTime;
             isCharging = false;
+            SoundManager.StopChargeSound();
 
             if (!CanFire())
                 return;
@@ -86,6 +88,7 @@ public class LemonShoot : MonoBehaviour
             else
             {
                 // Disparo normal.
+                SoundManager.PlaySound(SoundType.shoot);
                 Fire(projectilePrefab, projectileDamage, projectileSpeed);
             }
         }

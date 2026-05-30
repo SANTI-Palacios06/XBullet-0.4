@@ -86,6 +86,12 @@ public class CombatHealth : MonoBehaviour, IDamageable
     {
         Debug.Log($"{displayName} murió.");
         gameObject.SetActive(false);
+        
+        if (GetComponent<LemonShoot>() != null)
+    {
+        SoundManager.StopChargeSound();
+        SoundManager.StopAllSounds();
+    }
         if (quitOnDeath)
         {
             Invoke(nameof(QuitGame), quitDelay);
