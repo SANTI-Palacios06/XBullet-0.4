@@ -582,7 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cffce2813a75144874424638d7d428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  SO: {fileID: 11400000, guid: 1ccb738c512433748b8f697f3d11cde9, type: 2}
+  SO: {fileID: 11400000, guid: 8d73d685c336a4c42b304e562d33fbf9, type: 2}
   chargeLoopStart: 2
 --- !u!1 &549539888
 GameObject:
@@ -1018,7 +1018,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120615128}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 3.56353, y: 1.00937, z: -1.14821}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
