@@ -41,7 +41,7 @@ public class PlayerMovement2D : MonoBehaviour
 
         Vector2 input = move.action.ReadValue<Vector2>();
 
-        moveInput = new Vector3(input.x, 0f, input.y);
+        moveInput = new Vector3(-input.x, 0f, -input.y);
     }
 
     private void FixedUpdate()
