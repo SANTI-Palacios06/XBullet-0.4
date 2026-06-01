@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d124a00bba31904f8ac7ab62c7dfa05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LemonShoot
-  projectilePrefab: {fileID: 581443623}
+  projectilePrefab: {fileID: 9024691948694969057}
   chargedProjectilePrefab: {fileID: 3583492582976474303, guid: c8ab97926cecc994bada85202916b128, type: 3}
   shootPoint: {fileID: 1360996760}
   globalImmuneObject: {fileID: 20262576}
@@ -697,94 +697,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &581443617
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.26961288
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.23957656
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.3943842
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2195893320775145199, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961150603677758860, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: m_Name
-      value: Lemon
-      objectReference: {fileID: 0}
-    - target: {fileID: 5797704941276996322, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 21f5692aa85ec1f4098723624a768a6f, type: 2}
-    - target: {fileID: 9024691948201622208, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-      propertyPath: lifeTime
-      value: 0.5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
---- !u!114 &581443623 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9024691948201622208, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
-  m_PrefabInstance: {fileID: 581443617}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a423be806474e4dbf8c5d47fee2f7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LemonProjectile
 --- !u!4 &678406689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8957081037404082751, guid: 927df87ca21de9947be35ae74575838a, type: 3}
@@ -1117,6 +1029,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 927df87ca21de9947be35ae74575838a, type: 3}
+--- !u!1001 &3847218013778386922
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4977949845442325878, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_Name
+      value: Lemon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247292257927761429, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+--- !u!114 &9024691948694969057 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1239334633943540282, guid: 8ee15a16d934f714586ce6c86fec99c6, type: 3}
+  m_PrefabInstance: {fileID: 3847218013778386922}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a423be806474e4dbf8c5d47fee2f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LemonProjectile
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1125,7 +1105,7 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 549539892}
   - {fileID: 1535763757}
-  - {fileID: 581443617}
+  - {fileID: 3847218013778386922}
   - {fileID: 20262581}
   - {fileID: 1120615130}
   - {fileID: 535630753}
