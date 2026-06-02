@@ -5645,18 +5645,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.2286
-      objectReference: {fileID: 0}
-    - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2.2286
-      objectReference: {fileID: 0}
-    - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2.2286
-      objectReference: {fileID: 0}
-    - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.09
       objectReference: {fileID: 0}
@@ -5700,41 +5688,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flamming Storm Eagle
       objectReference: {fileID: 0}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: shootPoint
-      value: 
-      objectReference: {fileID: 781937164}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: fireInterval
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: rosetteSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: helicalFanSpeed
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: classicSpiralSpeed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7077887308503841870, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: segmentedFlowerSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8957081037404082751, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.715
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5629699720235612526, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1721494161}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 927df87ca21de9947be35ae74575838a, type: 3}
 --- !u!1 &581148209
 GameObject:
@@ -7265,11 +7222,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762141217}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &781937164 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8957081037404082751, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-  m_PrefabInstance: {fileID: 575515358}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &860226426
 GameObject:
   m_ObjectHideFlags: 0
@@ -12921,32 +12873,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 252096522}
   m_SourcePrefab: {fileID: 100100000, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
---- !u!1 &1721494157 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5629699720235612526, guid: 927df87ca21de9947be35ae74575838a, type: 3}
-  m_PrefabInstance: {fileID: 575515358}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1721494161
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1721494157}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0730822, y: 1.8213505, z: 0.73685193}
-  m_Center: {x: -0.036540754, y: 0.8709432, z: -0.13157447}
 --- !u!1 &1756013316
 GameObject:
   m_ObjectHideFlags: 0
