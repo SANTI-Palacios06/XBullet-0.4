@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 302097791496230428}
   - component: {fileID: -4439511516721168530}
   - component: {fileID: 3583492582976474303}
+  - component: {fileID: 1028536614478867890}
   m_Layer: 0
   m_Name: MegaShoot
   m_TagString: Untagged
@@ -161,3 +162,15 @@ MonoBehaviour:
     m_Bits: 0
   enemyProjectileTag: EnemyProjectile
   destroySelfOnIntercept: 0
+--- !u!114 &1028536614478867890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3974881042277021937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb8706163988d64f96be61e85c2f988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallPhase
