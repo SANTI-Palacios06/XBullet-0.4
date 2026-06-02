@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - Camara
   - boss
+  - EnemyProjectile
+  - PinballBall
+  - Destroyer
   layers:
   - Default
   - TransparentFX
@@ -46,3 +49,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []

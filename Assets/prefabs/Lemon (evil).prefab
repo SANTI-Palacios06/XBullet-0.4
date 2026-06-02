@@ -86,6 +86,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2961150603677758860, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3546796847494489903}
+    - targetCorrespondingSourceObject: {fileID: 2961150603677758860, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6635351835443900340}
   m_SourcePrefab: {fileID: 100100000, guid: 6a15aec278ad1cf4abe71da1073380e8, type: 3}
 --- !u!1 &619065871056625026 stripped
 GameObject:
@@ -149,3 +152,15 @@ MonoBehaviour:
   damage: 1
   inmuneObject: {fileID: 0}
   playerTag: Player
+--- !u!114 &6635351835443900340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619065871056625026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb8706163988d64f96be61e85c2f988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallPhase
