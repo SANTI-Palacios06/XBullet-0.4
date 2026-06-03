@@ -19,6 +19,11 @@ public class PinballBall : MonoBehaviour
     [Tooltip("Fuerza de expulsión hacia arriba cuando se detecta que está atascada.")]
     [SerializeField] private float unstuckForce = 15f;
 
+    [Header("Daño al jefe")]
+    [SerializeField] private int damageOnHit = 10;
+    [Tooltip("Tag que debe tener el jefe para recibir daño.")]
+    [SerializeField] private string bossTag = "boss";
+
     private Rigidbody rb;
     private bool isActive = true;
     private Vector3 lastPosition;
@@ -42,6 +47,14 @@ public class PinballBall : MonoBehaviour
         if (collision.gameObject.CompareTag("Destroyer"))
         {
             Drain();
+            return;
+        }
+
+        // Daña al jefe si la pelota lo toca
+        if (collision.gameObject.CompareTag(bossTag))
+        {
+            IDamageable target = collision.gameObject.GetComponent<IDamageable>();
+            target?.TakeDamage(damageOnHit);
             return;
         }
 
