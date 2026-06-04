@@ -32,6 +32,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Flipper L",
+                    "type": "Button",
+                    "id": "e3c8a38b-8afd-4879-9b3f-8b3c3c57b9b4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Flipper R",
+                    "type": "Button",
+                    "id": "646d807b-b49a-46fc-886d-544cd0109224",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -76,6 +94,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "charge shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21a96536-1b53-4de4-b672-37e123544cb9",
+                    "path": "<XInputController>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Xbox",
+                    "action": "Flipper L",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5758ea4-1430-444f-9ee0-780c73d6f8b2",
+                    "path": "<XInputController>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Xbox",
+                    "action": "Flipper R",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
