@@ -3,9 +3,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Palanca de pinball controlada por InputAction.
-/// El Rigidbody es cinemático para empujar la pelota de forma estable.
-/// Cada palanca recibe sus ángulos y botón mediante Configure.
-/// </summary>
+/// Via righsbody empuja a la pelota de forma estable.
 [RequireComponent(typeof(Rigidbody))]
 public class PinballFlipper : MonoBehaviour
 {
@@ -31,9 +29,7 @@ public class PinballFlipper : MonoBehaviour
     private Rigidbody rb;
     private bool hasKicked = false;
 
-    /// <summary>
     /// Guarda el Rigidbody y lo configura como cinemático.
-    /// </summary>
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -52,9 +48,7 @@ public class PinballFlipper : MonoBehaviour
             flipperAction.action.Disable();
     }
 
-    /// <summary>
     /// Configura orientación y lado de la palanca.
-    /// </summary>
     public void Configure(bool newIsLeftFlipper, float newRestAngle, float newActiveAngle)
     {
         isLeftFlipper = newIsLeftFlipper;
@@ -63,11 +57,7 @@ public class PinballFlipper : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, restAngle, 0f);
     }
 
-    /// <summary>
     /// Rota gradualmente hacia el ángulo activo o de reposo según el input.
-    /// La rotación es sobre Y porque el tablero está en el plano XZ.
-    /// Resetea hasKicked cuando se suelta el botón.
-    /// </summary>
     private void FixedUpdate()
     {
         float targetAngle = IsPressed() ? activeAngle : restAngle;
@@ -80,12 +70,10 @@ public class PinballFlipper : MonoBehaviour
             hasKicked = false;
     }
 
-    /// <summary>
     /// Aplica el impulso una sola vez por pulsación.
     /// La fuerza se calcula con la masa de la pelota para que
     /// siempre salga a la misma velocidad sin importar cuánto pese.
-    /// Fuerza = masa * velocidad deseada (impulso = cambio de momento)
-    /// </summary>
+   
     private void OnCollisionStay(Collision collision)
     {
         if (hasKicked) return;
@@ -98,7 +86,6 @@ public class PinballFlipper : MonoBehaviour
 
         hasKicked = true;
 
-        // Limpiamos velocidad Z para que el impulso se sienta limpio
         Vector3 vel = ballRb.linearVelocity;
         vel.z = 0f;
         ballRb.linearVelocity = vel;
@@ -106,16 +93,13 @@ public class PinballFlipper : MonoBehaviour
         float horizontalDirection = isLeftFlipper ? 0.3f : -0.3f;
         Vector3 impulseDirection = new Vector3(horizontalDirection, 0f, -1f).normalized;
 
-        // Fuerza = masa * velocidad deseada * multiplicador
         float force = ballRb.mass * launchSpeed * massMultiplier;
         ballRb.AddForce(impulseDirection * force, ForceMode.Impulse);
 
         Debug.Log($"Flipper golpeó la pelota. Masa: {ballRb.mass} | Fuerza aplicada: {force}");
     }
 
-    /// <summary>
     /// Lee el estado del InputAction asignado en el Inspector.
-    /// </summary>
     private bool IsPressed()
     {
         if (flipperAction == null || flipperAction.action == null)
