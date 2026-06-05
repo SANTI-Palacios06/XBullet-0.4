@@ -6159,7 +6159,6 @@ GameObject:
   - component: {fileID: 601179799}
   - component: {fileID: 601179798}
   - component: {fileID: 601179797}
-  - component: {fileID: 601179796}
   m_Layer: 0
   m_Name: DOWN (1)
   m_TagString: Destroyer
@@ -6182,19 +6181,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 365567611}
   m_LocalEulerAnglesHint: {x: -89.824, y: -268.42902, z: 88.777}
---- !u!114 &601179796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601179793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38955792d5fd8994484a8e9e049571a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Destroyer
-  projectileTag: EnemyProjectile
 --- !u!65 &601179797
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12059,7 +12045,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.46
+      value: -8.71
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12067,7 +12053,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.5
+      value: 47.25
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12119,6 +12105,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3239465736269878160, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1809540278}
+    - targetCorrespondingSourceObject: {fileID: 3239465736269878160, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1809540281}
   m_SourcePrefab: {fileID: 100100000, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
 --- !u!1 &1571879118
 GameObject:
@@ -13735,7 +13724,7 @@ MonoBehaviour:
   minSpeed: 20
   maxSpeed: 30
   stuckTime: 1
-  unstuckForce: 50
+  unstuckForce: 80
   damageOnHit: 10
   bossTag: boss
 --- !u!54 &1809540279
@@ -13765,6 +13754,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 36
   m_CollisionDetection: 0
+--- !u!114 &1809540281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809540276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487dcbd63bc359e41bb099a64bc083db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InstantKill
+  playerHealth: {fileID: 139079954}
 --- !u!1 &1832498725 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2688151502403385294, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
