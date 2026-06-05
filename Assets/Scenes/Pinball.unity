@@ -6160,7 +6160,6 @@ GameObject:
   - component: {fileID: 601179798}
   - component: {fileID: 601179797}
   - component: {fileID: 601179796}
-  - component: {fileID: 601179795}
   m_Layer: 0
   m_Name: DOWN (1)
   m_TagString: Destroyer
@@ -6183,18 +6182,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 365567611}
   m_LocalEulerAnglesHint: {x: -89.824, y: -268.42902, z: 88.777}
---- !u!114 &601179795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601179793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eb8706163988d64f96be61e85c2f988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WallPhase
 --- !u!114 &601179796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8308,7 +8295,7 @@ MonoBehaviour:
   displayName: Objetivo
   maxHealth: 50
   currentHealth: 0
-  quitOnDeath: 0
+  quitOnDeath: 1
   quitDelay: 3
 --- !u!1 &1017310554
 GameObject:
@@ -12072,7 +12059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.86
+      value: -16.2
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12080,7 +12067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 37.7
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14979,7 +14966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5842947119382946099, guid: 0331bad1446ca9c4c88a5ecfb9b96406, type: 3}
       propertyPath: m_LocalPosition.z

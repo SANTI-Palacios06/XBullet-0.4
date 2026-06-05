@@ -15,7 +15,7 @@ public class CombatHealth : MonoBehaviour, IDamageable
     [SerializeField] private int currentHealth;
 
     [Header("Al morir")]
-    [Tooltip("Si es true, cierra la aplicación al morir. Si es false, solo desactiva el objeto.")]
+    [Tooltip("Si es true, cierra la aplicación al morir. Solo aplica a objetos sin tag Player o boss.")]
     [SerializeField] private bool quitOnDeath = false;
     [Tooltip("Segundos antes de cerrar la aplicación al morir.")]
     [SerializeField] private float quitDelay = 3f;
@@ -43,27 +43,20 @@ public class CombatHealth : MonoBehaviour, IDamageable
     /// Clamp evita que la vida baje de cero.
     public void TakeDamage(int amount)
     {
-        if (IsDead)
-        {
-            return;
-        }
+        if (IsDead) return;
         currentHealth = Mathf.Clamp(currentHealth - Mathf.Max(0, amount), 0, maxHealth);
         Debug.Log($"{displayName} recibió {amount} de daño. Vida: {currentHealth}/{maxHealth}");
-        if (IsDead)
-        {
-            Die();
-        }
+        if (IsDead) Die();
     }
 
-    /// Ui de la barra de vida, 
+    /// Ui de la barra de vida
     public float GetCurrentPhaseFill()
     {
-        int redPhaseHealth = GetRedPhaseHealth();
+        int redPhaseHealth   = GetRedPhaseHealth();
         int greenPhaseHealth = maxHealth - redPhaseHealth;
         if (currentHealth > redPhaseHealth)
-        {
             return Mathf.InverseLerp(0, greenPhaseHealth, currentHealth - redPhaseHealth);
-        }
+
         return Mathf.InverseLerp(0, redPhaseHealth, currentHealth);
     }
 
@@ -81,21 +74,54 @@ public class CombatHealth : MonoBehaviour, IDamageable
         return Mathf.CeilToInt(maxHealth * 0.5f);
     }
 
-    /// Resuelve la muerte del objeto.
+    /// Congela la pelota de pinball
+    private void FreezeBall()
+    {
+        GameObject ball = GameObject.FindWithTag("PinballBall");
+        if (ball == null) return;
+        Rigidbody rb = ball.GetComponent<Rigidbody>();
+        if (rb == null) return;
+        rb.linearVelocity        = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic     = true;
+    }
+
+    /// Resuelve los casos de victoria y derrota del jugador.
     private void Die()
     {
-        Debug.Log($"{displayName} murió.");
-        gameObject.SetActive(false);
-        
-        if (GetComponent<LemonShoot>() != null)
-    {
-        SoundManager.StopChargeSound();
-        SoundManager.StopAllSounds();
-    }
-        if (quitOnDeath)
+        if (CompareTag("Player"))
         {
-            Invoke(nameof(QuitGame), quitDelay);
+            Debug.Log("DERROTA — el jugador ha muerto.");
+            FreezeBall();
+            MusicManager.Instance.StopMusic();
+            SoundManager.StopAllSounds();
+            SoundManager.PlayResultSound(SoundType.defeat);
+            float delay = SoundManager.GetClipLength(SoundType.defeat);
+            Invoke(nameof(QuitGame), delay);
         }
+        else if (CompareTag("boss"))
+        {
+            Debug.Log("VICTORIA — el jefe ha sido derrotado.");
+            FreezeBall();
+            DestroyAllLemonEvilsTrigger.DestroyAllLemonEvils();
+            MusicManager.Instance.StopMusic();
+            SoundManager.StopAllSounds();
+            SoundManager.PlayResultSound(SoundType.victory);
+            float delay = SoundManager.GetClipLength(SoundType.victory);
+            Invoke(nameof(QuitGame), delay);
+        }
+        else
+        {
+            Debug.Log($"Muerte neutral — tag: {tag}");
+            if (GetComponent<LemonShoot>() != null)
+            {
+                SoundManager.StopChargeSound();
+                SoundManager.StopAllSounds();
+            }
+            if (quitOnDeath)
+                Invoke(nameof(QuitGame), quitDelay);
+        }
+        gameObject.SetActive(false);
     }
 
     private void QuitGame()
