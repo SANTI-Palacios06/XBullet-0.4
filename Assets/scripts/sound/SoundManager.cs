@@ -7,11 +7,12 @@ public enum SoundType
 {
     shoot,
     chargeShoot,
-    criticalHealth
+    criticalHealth,
+    victory,
+    defeat
 }
 
-
-//Se encarga de ller la lista de efectos de sonido
+//Se encarga de leer la lista de efectos de sonido
 [Serializable]
 public struct SoundList
 {
@@ -33,10 +34,10 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundSO SO;
     [SerializeField] private float chargeLoopStart = 2f;
-
     private static SoundManager instance = null;
     private AudioSource audioSource;
     private AudioSource chargeLoopSource;
+    private AudioSource resultSource;
 
     private void Awake()
     {
@@ -54,6 +55,12 @@ public class SoundManager : MonoBehaviour
             chargeLoopSource.spatialBlend = 0f;
             chargeLoopSource.playOnAwake  = false;
             chargeLoopSource.loop         = false;
+
+            // AudioSource dedicado para victoria y derrota, no se solapa con el principal
+            resultSource = gameObject.AddComponent<AudioSource>();
+            resultSource.spatialBlend = 0f;
+            resultSource.playOnAwake  = false;
+            resultSource.loop         = false;
         }
     }
 
@@ -73,7 +80,6 @@ public class SoundManager : MonoBehaviour
         SoundList soundList  = instance.SO.sounds[(int)sound];
         AudioClip[] clips    = soundList.sounds;
         if (clips == null || clips.Length == 0) return;
-
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
         if (source)
@@ -94,14 +100,25 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    // Reproduce soniso de victoria o derrota
+    public static void PlayResultSound(SoundType sound)
+    {
+        SoundList soundList = instance.SO.sounds[(int)sound];
+        if (soundList.sounds == null || soundList.sounds.Length == 0) return;
+
+        instance.resultSource.Stop();
+        instance.resultSource.outputAudioMixerGroup = soundList.mixer;
+        instance.resultSource.clip   = soundList.sounds[0];
+        instance.resultSource.volume = soundList.volume;
+        instance.resultSource.Play();
+    }
+
     // Inicia el sonido de carga desde el inicio 
     public static void StartChargeSound()
     {
         if (instance.chargeLoopSource.isPlaying) return;
-
         SoundList soundList = instance.SO.sounds[(int)SoundType.chargeShoot];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
-
         instance.chargeLoopSource.outputAudioMixerGroup = soundList.mixer;
         instance.chargeLoopSource.clip   = soundList.sounds[0];
         instance.chargeLoopSource.volume = soundList.volume;
@@ -115,10 +132,18 @@ public class SoundManager : MonoBehaviour
         instance.chargeLoopSource.Stop();
     }
 
-    //Corte abructo de todos los efectos de sonido al ser llamado
+    //Corte abrupto de todos los efectos de sonido al ser llamado
     public static void StopAllSounds()
-{
-    instance.audioSource.Stop();
-    instance.chargeLoopSource.Stop();
-}
+    {
+        instance.audioSource.Stop();
+        instance.chargeLoopSource.Stop();
+    }
+
+    // Recuperra la duraccion del clip
+    public static float GetClipLength(SoundType sound)
+    {
+        SoundList soundList = instance.SO.sounds[(int)sound];
+        if (soundList.sounds == null || soundList.sounds.Length == 0) return 0f;
+        return soundList.sounds[0].length;
+    }
 }
