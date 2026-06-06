@@ -1,7 +1,6 @@
 using UnityEngine;
 
-//Manejo del proyectil, maneja su impacti, movimiento, direccion, impacto, interraccion con proyectil enemigo y gvelocidad
-
+//Manejo del proyectil, maneja su impacto, movimiento, direccion, impacto, interraccion con proyectil enemigo y velocidad
 [RequireComponent(typeof(Rigidbody))]
 public class LemonProjectile : MonoBehaviour
 {
@@ -43,53 +42,54 @@ public class LemonProjectile : MonoBehaviour
     }
 
     public void ConfigureCollisionLayers(LayerMask layers) => destroyOnContactLayers = layers;
-    public void SetOwner(Transform newOwner) => owner = newOwner;
-    public void SetImmuneObject(GameObject obj) => immuneObject = obj;
+    public void SetOwner(Transform newOwner)               => owner = newOwner;
+    public void SetImmuneObject(GameObject obj)            => immuneObject = obj;
 
-//Velocidad de lanzamiento del proyectil
+    // Velocidad de lanzamiento del proyectil
     public void Launch(Vector3 direction, float speed, int projectileDamage)
     {
-        damage = projectileDamage;
-        travelSpeed = speed;
+        damage          = projectileDamage;
+        travelSpeed     = speed;
         travelDirection = direction.sqrMagnitude < 0.01f ? Vector3.left : direction.normalized;
-        wasLaunched = true;
+        wasLaunched     = true;
         Destroy(gameObject, lifeTime);
         Debug.Log($"Disparo lanzado hacia {travelDirection} con velocidad {speed}");
     }
 
-    public int Damage => damage;
-    public Transform Owner => owner;
+    public int       Damage => damage;
+    public Transform Owner  => owner;
 
-    private void OnTriggerEnter(Collider other) => HandleContact(other.gameObject);
+    private void OnTriggerEnter(Collider other)      => HandleContact(other.gameObject);
     private void OnCollisionEnter(Collision collision) => HandleContact(collision.gameObject);
 
-
-//Maneja el contacto del proyectil, su interraccion y destruccion. tambien maneja la destruccion del enemigo 
+    // Maneja el contacto del proyectil, su interacción y destrucción.
+    // También maneja la destrucción del proyectil enemigo y registra score.
     private void HandleContact(GameObject other)
-{
-    if (!wasLaunched) return;
-    if (immuneObject != null && other == immuneObject) return;
-    if (IsOwnerOrOwnerChild(other.transform)) return;
-
-    if (!string.IsNullOrEmpty(enemyProjectileTag) && other.CompareTag(enemyProjectileTag))
     {
-        Destroy(other);
-        if (destroySelfOnIntercept) Destroy(gameObject);
-        return;
-    }
+        if (!wasLaunched) return;
+        if (immuneObject != null && other == immuneObject) return;
+        if (IsOwnerOrOwnerChild(other.transform)) return;
 
-    
-    IDamageable target = other.GetComponent<IDamageable>();
-    if (target != null)
-    {
-        target.TakeDamage(damage);
-    }
+        if (!string.IsNullOrEmpty(enemyProjectileTag) && other.CompareTag(enemyProjectileTag))
+        {
+            Destroy(other);
+            // Registra score por proyectil enemigo destruido
+            PinballScoreManager.Instance?.RegisterEnemyProjectileDestroyed();
+            if (destroySelfOnIntercept) Destroy(gameObject);
+            return;
+        }
 
-    if (IsInLayerMask(other.layer, destroyOnContactLayers))
-    {
-        Destroy(gameObject);
+        IDamageable target = other.GetComponent<IDamageable>();
+        if (target != null)
+        {
+            target.TakeDamage(damage);
+        }
+
+        if (IsInLayerMask(other.layer, destroyOnContactLayers))
+        {
+            Destroy(gameObject);
+        }
     }
-}
 
     private bool IsInLayerMask(int layer, LayerMask layerMask)
     {

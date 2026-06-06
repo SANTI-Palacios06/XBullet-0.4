@@ -2596,6 +2596,57 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242367361}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &244070502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 244070504}
+  - component: {fileID: 244070503}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &244070503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244070502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b2150a32d481b409c9b1733df3d286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PinballScoreManager
+  flipperPoints: 200
+  bossHitPoints: 500
+  bossDefeatPoints: 1000
+  enemyProjectilePoints: 50
+  bonusPerLife: 2000
+  playerTag: Player
+  currentScore: 0
+--- !u!4 &244070504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244070502}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.03004, y: 0, z: 1.18957}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &252096520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2688151502403385294, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
@@ -5748,33 +5799,41 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 1395925076716476844, guid: 927df87ca21de9947be35ae74575838a, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1395925076716476844, guid: 927df87ca21de9947be35ae74575838a, type: 3}
+      propertyPath: quitOnDeath
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -25.167131
+      value: -9.76
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000025918555
+      value: 0.0000015816203
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.8483205
+      value: -12.945
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98611826
+      value: 0.3902542
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.000014339137
+      value: -0.000000022085977
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.16604444
+      value: 0.92070717
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00008561243
+      value: -0.0000000055886833
       objectReference: {fileID: 0}
     - target: {fileID: 5002204776993268692, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12623,7 +12682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.13
+      value: -7.04
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12631,7 +12690,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.61
+      value: 12.82
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14424,7 +14483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PinballBall
   initialImpulse: {x: 0, y: 0, z: 10}
-  attractForce: 10
+  attractForce: 25
   minSpeed: 20
   maxSpeed: 30
   stuckTime: 1
@@ -17288,3 +17347,4 @@ SceneRoots:
   - {fileID: 1756013319}
   - {fileID: 575515358}
   - {fileID: 139079963}
+  - {fileID: 244070504}
