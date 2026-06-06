@@ -207,13 +207,13 @@ Permiten mantener la pelota en juego y dirigirla hacia el jefe.
 
 * Way of Work:
 
-  * [Agregar enlace]
+  * https://app.notion.com/p/Way-of-Work-d36cca67b3ac829ca1398109c057267a
 
 En este enlace se encuentra toda la documentación de procesos llevados a cabo para el proyecto y la forma de trabajo definida.
 
 * XBullet:
 
-  * [Agregar enlace]
+  * (https://app.notion.com/p/X-Bullet-cd5cca67b3ac82e4a8f1818cc4b68a5b)
 
 En este link está toda la documentación del proyecto, incluidos los manuales técnicos, RTM, documentos de desarrollo como análisis, diseño y pruebas, entre otros.
 
