@@ -1,6 +1,5 @@
 using UnityEngine;
 
-/// Cuando la pelota es desactivada o destruida, mata al jugador.
 public class InstantKillBall : MonoBehaviour
 {
     [Tooltip("El jugador que será eliminado cuando la pelota desaparezca.")]
@@ -8,8 +7,20 @@ public class InstantKillBall : MonoBehaviour
 
     private void OnDisable()
     {
+        if (!Application.isPlaying) return;
+
+     
+        if (PinballScoreManager.Instance != null &&
+            PinballScoreManager.Instance.SessionClosed)
+        {
+            Debug.Log("InstantKillBall ignorado: la sesión ya estaba cerrada.");
+            return;
+        }
+
         if (playerHealth == null) return;
         if (playerHealth.IsDead) return;
+
+        Debug.Log("InstantKillBall ejecutado: la pelota desapareció y el jugador pierde.");
         playerHealth.TakeDamage(playerHealth.MaxHealth);
     }
 }

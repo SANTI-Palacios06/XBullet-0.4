@@ -50,10 +50,11 @@ public class PinballBall : MonoBehaviour
             return;
         }
 
-        // Daña al jefe si la pelota lo toca
+        // Daña al jefe si la pelota lo toca y registra score
         if (collision.gameObject.CompareTag(bossTag))
         {
             IDamageable target = collision.gameObject.GetComponent<IDamageable>();
+            PinballScoreManager.Instance?.RegisterBossHit();
             target?.TakeDamage(damageOnHit);
             return;
         }
@@ -91,8 +92,8 @@ public class PinballBall : MonoBehaviour
     // Expulsa la pelota cuando está estancada
     private void Unstuck()
     {
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        //rb.linearVelocity  = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
         rb.AddForce(new Vector3(0f, 0f, -unstuckForce), ForceMode.Impulse);
         Debug.Log("Pelota atascada, expulsando.");
     }
@@ -128,11 +129,11 @@ public class PinballBall : MonoBehaviour
     {
         isActive = true;
         gameObject.SetActive(true);
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity  = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(initialImpulse, ForceMode.Impulse);
         lastPosition = rb.position;
-        stuckTimer = 0f;
+        stuckTimer   = 0f;
     }
 
     // Detiene la pelota cuando cae fuera del tablero
@@ -140,7 +141,7 @@ public class PinballBall : MonoBehaviour
     {
         if (!isActive) return;
         isActive = false;
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity  = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         OnDrain?.Invoke(this);
         gameObject.SetActive(false);
@@ -156,7 +157,7 @@ public class PinballBall : MonoBehaviour
     public void DeactivateBall()
     {
         isActive = false;
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity  = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
@@ -164,10 +165,10 @@ public class PinballBall : MonoBehaviour
     public void ResetBall()
     {
         isActive = true;
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity  = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         lastPosition = rb.position;
-        stuckTimer = 0f;
+        stuckTimer   = 0f;
         Debug.Log("Pelota reiniciada correctamente.");
     }
 }

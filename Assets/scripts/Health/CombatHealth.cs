@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// Vida reutilizable para jugador, enemigo o futuros objetos dañables.
@@ -25,6 +26,9 @@ public class CombatHealth : MonoBehaviour, IDamageable
     public int MaxHealth => maxHealth;
     public int CurrentHealth => currentHealth;
     public bool IsDead => currentHealth <= 0;
+
+    /// Evento que se dispara cuando el objeto muere.
+    public event Action<CombatHealth> Died;
 
     private void Awake()
     {
@@ -81,49 +85,88 @@ public class CombatHealth : MonoBehaviour, IDamageable
         if (ball == null) return;
         Rigidbody rb = ball.GetComponent<Rigidbody>();
         if (rb == null) return;
-        rb.linearVelocity        = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        //rb.linearVelocity  = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
         rb.isKinematic     = true;
     }
 
-    /// Resuelve los casos de victoria y derrota del jugador.
+    /// Resuelve los casos de victoria y derrota del jugador, igalmente4 maneja el socre tras morir y el sonido de victoria y derrota.
     private void Die()
+{
+    int subscribers = Died?.GetInvocationList().Length ?? 0;
+    Debug.Log($"{displayName} entró a Die(). Suscriptores al evento Died: {subscribers}");
+
+ 
+    Died?.Invoke(this);
+
+    if (CompareTag("Player"))
     {
-        if (CompareTag("Player"))
+       
+        if (PinballScoreManager.Instance != null)
         {
-            Debug.Log("DERROTA — el jugador ha muerto.");
-            FreezeBall();
-            MusicManager.Instance.StopMusic();
-            SoundManager.StopAllSounds();
-            SoundManager.PlayResultSound(SoundType.defeat);
-            float delay = SoundManager.GetClipLength(SoundType.defeat);
-            Invoke(nameof(QuitGame), delay);
-        }
-        else if (CompareTag("boss"))
-        {
-            Debug.Log("VICTORIA — el jefe ha sido derrotado.");
-            FreezeBall();
-            DestroyAllLemonEvilsTrigger.DestroyAllLemonEvils();
-            MusicManager.Instance.StopMusic();
-            SoundManager.StopAllSounds();
-            SoundManager.PlayResultSound(SoundType.victory);
-            float delay = SoundManager.GetClipLength(SoundType.victory);
-            Invoke(nameof(QuitGame), delay);
+            PinballScoreManager.Instance.NotifyPlayerDefeated(this);
         }
         else
         {
-            Debug.Log($"Muerte neutral — tag: {tag}");
-            if (GetComponent<LemonShoot>() != null)
-            {
-                SoundManager.StopChargeSound();
-                SoundManager.StopAllSounds();
-            }
-            if (quitOnDeath)
-                Invoke(nameof(QuitGame), quitDelay);
+            Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
         }
-        gameObject.SetActive(false);
+
+        Debug.Log("DERROTA — el jugador ha muerto.");
+        FreezeBall();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
+
+        SoundManager.StopAllSounds();
+        SoundManager.PlayResultSound(SoundType.defeat);
+
+        float delay = SoundManager.GetClipLength(SoundType.defeat);
+        Invoke(nameof(QuitGame), delay);
+    }
+    else if (CompareTag("boss"))
+    {
+      
+        if (PinballScoreManager.Instance != null)
+        {
+            PinballScoreManager.Instance.NotifyEnemyDefeated(this);
+        }
+        else
+        {
+            Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
+        }
+
+        Debug.Log("VICTORIA — el jefe ha sido derrotado.");
+        FreezeBall();
+
+        DestroyAllLemonEvilsTrigger.DestroyAllLemonEvils();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
+
+        SoundManager.StopAllSounds();
+        SoundManager.PlayResultSound(SoundType.victory);
+
+        float delay = SoundManager.GetClipLength(SoundType.victory);
+        Invoke(nameof(QuitGame), delay);
+    }
+    else
+    {
+        Debug.Log($"Muerte neutral — tag: {tag}");
+
+        if (GetComponent<LemonShoot>() != null)
+        {
+            SoundManager.StopChargeSound();
+            SoundManager.StopAllSounds();
+        }
+
+        if (quitOnDeath)
+        {
+            Invoke(nameof(QuitGame), quitDelay);
+        }
     }
 
+    gameObject.SetActive(false);
+}
     private void QuitGame()
     {
         Application.Quit();
