@@ -108,17 +108,28 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Reproduce sonido de victoria o derrota
+    // Reproduce sonido de victoria o derrota, ambos clips al mismo tiempo
     public static void PlayResultSound(SoundType sound)
     {
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
 
-        instance.resultSource.Stop();
-        instance.resultSource.outputAudioMixerGroup = soundList.mixer;
-        instance.resultSource.clip   = soundList.sounds[0];
-        instance.resultSource.volume = soundList.volume;
-        instance.resultSource.Play();
+        // Primer clip en audioSource principal
+        instance.audioSource.Stop();
+        instance.audioSource.outputAudioMixerGroup = soundList.mixer;
+        instance.audioSource.clip   = soundList.sounds[0];
+        instance.audioSource.volume = soundList.volume;
+        instance.audioSource.Play();
+
+        // Segundo clip en resultSource al mismo tiempo
+        if (soundList.sounds.Length > 1 && soundList.sounds[1] != null)
+        {
+            instance.resultSource.Stop();
+            instance.resultSource.outputAudioMixerGroup = soundList.mixer;
+            instance.resultSource.clip   = soundList.sounds[1];
+            instance.resultSource.volume = soundList.volume;
+            instance.resultSource.Play();
+        }
     }
 
     // Inicia el sonido de carga desde el inicio 
@@ -140,7 +151,7 @@ public class SoundManager : MonoBehaviour
         instance.chargeLoopSource.Stop();
     }
 
-    // Inicia el sonido crítico
+    // Inicia el sonido crítico en loop
     public static void StartCriticalSound()
     {
         if (instance.criticalLoopSource.isPlaying) return;
@@ -166,11 +177,14 @@ public class SoundManager : MonoBehaviour
         instance.criticalLoopSource.Stop();
     }
 
-    // Recupera la duración del clip
+    // Recupera la duración del clip más largo
     public static float GetClipLength(SoundType sound)
     {
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return 0f;
-        return soundList.sounds[0].length;
+        float maxLength = 0f;
+        foreach (AudioClip clip in soundList.sounds)
+            if (clip != null) maxLength = Mathf.Max(maxLength, clip.length);
+        return maxLength;
     }
 }
