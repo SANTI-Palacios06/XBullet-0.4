@@ -30,6 +30,9 @@ public class CombatHealth : MonoBehaviour, IDamageable
     /// Evento que se dispara cuando el objeto muere.
     public event Action<CombatHealth> Died;
 
+    /// Flag para que el sonido crítico suene solo una vez al bajar del umbral.
+    private bool criticalSoundPlayed = false;
+
     private void Awake()
     {
         currentHealth = maxHealth;
@@ -41,6 +44,7 @@ public class CombatHealth : MonoBehaviour, IDamageable
         displayName = newDisplayName;
         maxHealth = Mathf.Max(1, newMaxHealth);
         currentHealth = maxHealth;
+        criticalSoundPlayed = false;
     }
 
     /// Recibe daño desde cualquier objeto que llame IDamageable.
@@ -50,6 +54,14 @@ public class CombatHealth : MonoBehaviour, IDamageable
         if (IsDead) return;
         currentHealth = Mathf.Clamp(currentHealth - Mathf.Max(0, amount), 0, maxHealth);
         Debug.Log($"{displayName} recibió {amount} de daño. Vida: {currentHealth}/{maxHealth}");
+
+        // Suena criticalHealth en loop una sola vez al bajar del umbral de 1/3 de vida
+        if (CompareTag("Player") && !criticalSoundPlayed && currentHealth <= Mathf.CeilToInt(maxHealth / 3f))
+        {
+            criticalSoundPlayed = true;
+            SoundManager.StartCriticalSound();
+        }
+
         if (IsDead) Die();
     }
 
@@ -90,83 +102,81 @@ public class CombatHealth : MonoBehaviour, IDamageable
         rb.isKinematic     = true;
     }
 
-    /// Resuelve los casos de victoria y derrota del jugador, igalmente4 maneja el socre tras morir y el sonido de victoria y derrota.
+    /// Resuelve los casos de victoria y derrota del jugador, igualmente4 maneja el socre tras morir y el sonido de victoria y derrota.
     private void Die()
-{
-    int subscribers = Died?.GetInvocationList().Length ?? 0;
-    Debug.Log($"{displayName} entró a Die(). Suscriptores al evento Died: {subscribers}");
-
- 
-    Died?.Invoke(this);
-
-    if (CompareTag("Player"))
     {
-       
-        if (PinballScoreManager.Instance != null)
+        int subscribers = Died?.GetInvocationList().Length ?? 0;
+        Debug.Log($"{displayName} entró a Die(). Suscriptores al evento Died: {subscribers}");
+
+        Died?.Invoke(this);
+
+        if (CompareTag("Player"))
         {
-            PinballScoreManager.Instance.NotifyPlayerDefeated(this);
-        }
-        else
-        {
-            Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
-        }
+            if (PinballScoreManager.Instance != null)
+            {
+                PinballScoreManager.Instance.NotifyPlayerDefeated(this);
+            }
+            else
+            {
+                Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
+            }
 
-        Debug.Log("DERROTA — el jugador ha muerto.");
-        FreezeBall();
+            Debug.Log("DERROTA — el jugador ha muerto.");
+            FreezeBall();
 
-        if (MusicManager.Instance != null)
-            MusicManager.Instance.StopMusic();
+            if (MusicManager.Instance != null)
+                MusicManager.Instance.StopMusic();
 
-        SoundManager.StopAllSounds();
-        SoundManager.PlayResultSound(SoundType.defeat);
-
-        float delay = SoundManager.GetClipLength(SoundType.defeat);
-        Invoke(nameof(QuitGame), delay);
-    }
-    else if (CompareTag("boss"))
-    {
-      
-        if (PinballScoreManager.Instance != null)
-        {
-            PinballScoreManager.Instance.NotifyEnemyDefeated(this);
-        }
-        else
-        {
-            Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
-        }
-
-        Debug.Log("VICTORIA — el jefe ha sido derrotado.");
-        FreezeBall();
-
-        DestroyAllLemonEvilsTrigger.DestroyAllLemonEvils();
-
-        if (MusicManager.Instance != null)
-            MusicManager.Instance.StopMusic();
-
-        SoundManager.StopAllSounds();
-        SoundManager.PlayResultSound(SoundType.victory);
-
-        float delay = SoundManager.GetClipLength(SoundType.victory);
-        Invoke(nameof(QuitGame), delay);
-    }
-    else
-    {
-        Debug.Log($"Muerte neutral — tag: {tag}");
-
-        if (GetComponent<LemonShoot>() != null)
-        {
-            SoundManager.StopChargeSound();
             SoundManager.StopAllSounds();
+            SoundManager.PlayResultSound(SoundType.defeat);
+
+            float delay = SoundManager.GetClipLength(SoundType.defeat);
+            Invoke(nameof(QuitGame), delay);
+        }
+        else if (CompareTag("boss"))
+        {
+            if (PinballScoreManager.Instance != null)
+            {
+                PinballScoreManager.Instance.NotifyEnemyDefeated(this);
+            }
+            else
+            {
+                Debug.LogWarning("No existe PinballScoreManager.Instance en la escena.");
+            }
+
+            Debug.Log("VICTORIA — el jefe ha sido derrotado.");
+            FreezeBall();
+
+            DestroyAllLemonEvilsTrigger.DestroyAllLemonEvils();
+
+            if (MusicManager.Instance != null)
+                MusicManager.Instance.StopMusic();
+
+            SoundManager.StopAllSounds();
+            SoundManager.PlayResultSound(SoundType.victory);
+
+            float delay = SoundManager.GetClipLength(SoundType.victory);
+            Invoke(nameof(QuitGame), delay);
+        }
+        else
+        {
+            Debug.Log($"Muerte neutral — tag: {tag}");
+
+            if (GetComponent<LemonShoot>() != null)
+            {
+                SoundManager.StopChargeSound();
+                SoundManager.StopAllSounds();
+            }
+
+            if (quitOnDeath)
+            {
+                Invoke(nameof(QuitGame), quitDelay);
+            }
         }
 
-        if (quitOnDeath)
-        {
-            Invoke(nameof(QuitGame), quitDelay);
-        }
+        gameObject.SetActive(false);
     }
 
-    gameObject.SetActive(false);
-}
     private void QuitGame()
     {
         Application.Quit();
