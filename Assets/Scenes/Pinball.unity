@@ -13983,7 +13983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cffce2813a75144874424638d7d428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  SO: {fileID: 11400000, guid: 8d73d685c336a4c42b304e562d33fbf9, type: 2}
+  SO: {fileID: 11400000, guid: 9112605bf3b5aac449020832d6d4068f, type: 2}
   chargeLoopStart: 2
 --- !u!82 &1756013318
 AudioSource:

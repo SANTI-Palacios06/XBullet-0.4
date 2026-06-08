@@ -21,6 +21,7 @@ public struct SoundList
     public AudioMixerGroup mixer;
     public AudioClip[] sounds;
 }
+
 //administra el sound SO
 [CreateAssetMenu(menuName = "Sounds SO", fileName = "Sounds SO")]
 public class SoundSO : ScriptableObject
@@ -38,6 +39,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource audioSource;
     private AudioSource chargeLoopSource;
     private AudioSource resultSource;
+    private AudioSource criticalLoopSource;
 
     private void Awake()
     {
@@ -61,6 +63,12 @@ public class SoundManager : MonoBehaviour
             resultSource.spatialBlend = 0f;
             resultSource.playOnAwake  = false;
             resultSource.loop         = false;
+
+            // AudioSource dedicado para el sonido crítico en loop
+            criticalLoopSource = gameObject.AddComponent<AudioSource>();
+            criticalLoopSource.spatialBlend = 0f;
+            criticalLoopSource.playOnAwake  = false;
+            criticalLoopSource.loop         = true;
         }
     }
 
@@ -100,17 +108,28 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Reproduce soniso de victoria o derrota
+    // Reproduce sonido de victoria o derrota, ambos clips al mismo tiempo
     public static void PlayResultSound(SoundType sound)
     {
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
 
-        instance.resultSource.Stop();
-        instance.resultSource.outputAudioMixerGroup = soundList.mixer;
-        instance.resultSource.clip   = soundList.sounds[0];
-        instance.resultSource.volume = soundList.volume;
-        instance.resultSource.Play();
+        // Primer clip en audioSource principal
+        instance.audioSource.Stop();
+        instance.audioSource.outputAudioMixerGroup = soundList.mixer;
+        instance.audioSource.clip   = soundList.sounds[0];
+        instance.audioSource.volume = soundList.volume;
+        instance.audioSource.Play();
+
+        // Segundo clip en resultSource al mismo tiempo
+        if (soundList.sounds.Length > 1 && soundList.sounds[1] != null)
+        {
+            instance.resultSource.Stop();
+            instance.resultSource.outputAudioMixerGroup = soundList.mixer;
+            instance.resultSource.clip   = soundList.sounds[1];
+            instance.resultSource.volume = soundList.volume;
+            instance.resultSource.Play();
+        }
     }
 
     // Inicia el sonido de carga desde el inicio 
@@ -132,18 +151,40 @@ public class SoundManager : MonoBehaviour
         instance.chargeLoopSource.Stop();
     }
 
+    // Inicia el sonido crítico en loop
+    public static void StartCriticalSound()
+    {
+        if (instance.criticalLoopSource.isPlaying) return;
+        SoundList soundList = instance.SO.sounds[(int)SoundType.criticalHealth];
+        if (soundList.sounds == null || soundList.sounds.Length == 0) return;
+        instance.criticalLoopSource.outputAudioMixerGroup = soundList.mixer;
+        instance.criticalLoopSource.clip   = soundList.sounds[0];
+        instance.criticalLoopSource.volume = soundList.volume;
+        instance.criticalLoopSource.Play();
+    }
+
+    // Detiene el sonido crítico
+    public static void StopCriticalSound()
+    {
+        instance.criticalLoopSource.Stop();
+    }
+
     //Corte abrupto de todos los efectos de sonido al ser llamado
     public static void StopAllSounds()
     {
         instance.audioSource.Stop();
         instance.chargeLoopSource.Stop();
+        instance.criticalLoopSource.Stop();
     }
 
-    // Recuperra la duraccion del clip
+    // Recupera la duración del clip más largo
     public static float GetClipLength(SoundType sound)
     {
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return 0f;
-        return soundList.sounds[0].length;
+        float maxLength = 0f;
+        foreach (AudioClip clip in soundList.sounds)
+            if (clip != null) maxLength = Mathf.Max(maxLength, clip.length);
+        return maxLength;
     }
 }

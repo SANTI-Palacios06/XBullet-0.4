@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: SoundSO.CS
+  m_Name: Sounds SO
   m_EditorClassIdentifier: Assembly-CSharp::SoundSO
   sounds:
   - name: 
@@ -26,7 +26,8 @@ MonoBehaviour:
   - name: 
     volume: 1
     mixer: {fileID: 0}
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: fd4a0570f1d86ed44baa0670259dd953, type: 3}
   - name: 
     volume: 1
     mixer: {fileID: 0}
@@ -36,5 +37,5 @@ MonoBehaviour:
     volume: 1
     mixer: {fileID: 0}
     sounds:
-    - {fileID: 8300000, guid: 3e3ac00f84724ac458ba497368b2e805, type: 3}
     - {fileID: 8300000, guid: 3b9094ae6911b1040b492538e40a40ce, type: 3}
+    - {fileID: 8300000, guid: 3e3ac00f84724ac458ba497368b2e805, type: 3}
