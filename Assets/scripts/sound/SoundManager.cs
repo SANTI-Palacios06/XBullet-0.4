@@ -41,6 +41,9 @@ public class SoundManager : MonoBehaviour
     private AudioSource resultSource;
     private AudioSource criticalLoopSource;
 
+    // Flag para bloquear sonidos mientras suena el resultado
+    private static bool resultPlaying = false;
+
     private void Awake()
     {
         if (!instance)
@@ -75,6 +78,7 @@ public class SoundManager : MonoBehaviour
     // Gestiona el loop manual al llegar al final vuelve a chargeLoopStart
     private void Update()
     {
+        if (chargeLoopSource == null) return;
         if (chargeLoopSource.isPlaying &&
             chargeLoopSource.time >= chargeLoopSource.clip.length - 0.05f)
         {
@@ -83,8 +87,12 @@ public class SoundManager : MonoBehaviour
     }
 
     // Reproduce un sonido del SO para cualquier sonido anterior para evitar solapamiento
+    // No interrumpe si está sonando el resultado de victoria o derrota
     public static void PlaySound(SoundType sound, AudioSource source = null, float volume = 1)
     {
+        if (instance == null) return;
+        if (resultPlaying) return;
+
         SoundList soundList  = instance.SO.sounds[(int)sound];
         AudioClip[] clips    = soundList.sounds;
         if (clips == null || clips.Length == 0) return;
@@ -100,6 +108,7 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
+            if (instance.audioSource == null) return;
             instance.audioSource.Stop();
             instance.audioSource.outputAudioMixerGroup = soundList.mixer;
             instance.audioSource.clip   = randomClip;
@@ -111,10 +120,14 @@ public class SoundManager : MonoBehaviour
     // Reproduce sonido de victoria o derrota, ambos clips al mismo tiempo
     public static void PlayResultSound(SoundType sound)
     {
+        if (instance == null) return;
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
 
+        resultPlaying = true;
+
         // Primer clip en audioSource principal
+        if (instance.audioSource == null) return;
         instance.audioSource.Stop();
         instance.audioSource.outputAudioMixerGroup = soundList.mixer;
         instance.audioSource.clip   = soundList.sounds[0];
@@ -124,6 +137,7 @@ public class SoundManager : MonoBehaviour
         // Segundo clip en resultSource al mismo tiempo
         if (soundList.sounds.Length > 1 && soundList.sounds[1] != null)
         {
+            if (instance.resultSource == null) return;
             instance.resultSource.Stop();
             instance.resultSource.outputAudioMixerGroup = soundList.mixer;
             instance.resultSource.clip   = soundList.sounds[1];
@@ -135,6 +149,7 @@ public class SoundManager : MonoBehaviour
     // Inicia el sonido de carga desde el inicio 
     public static void StartChargeSound()
     {
+        if (instance == null || instance.chargeLoopSource == null) return;
         if (instance.chargeLoopSource.isPlaying) return;
         SoundList soundList = instance.SO.sounds[(int)SoundType.chargeShoot];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
@@ -148,12 +163,15 @@ public class SoundManager : MonoBehaviour
     // Corta el sonido de carga inmediatamente tras soltar X
     public static void StopChargeSound()
     {
+        if (instance == null || instance.chargeLoopSource == null) return;
         instance.chargeLoopSource.Stop();
     }
 
     // Inicia el sonido crítico en loop
     public static void StartCriticalSound()
     {
+        if (instance == null || instance.criticalLoopSource == null) return;
+        if (resultPlaying) return;
         if (instance.criticalLoopSource.isPlaying) return;
         SoundList soundList = instance.SO.sounds[(int)SoundType.criticalHealth];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return;
@@ -166,20 +184,24 @@ public class SoundManager : MonoBehaviour
     // Detiene el sonido crítico
     public static void StopCriticalSound()
     {
+        if (instance == null || instance.criticalLoopSource == null) return;
         instance.criticalLoopSource.Stop();
     }
 
     //Corte abrupto de todos los efectos de sonido al ser llamado
+    // resultSource NO se detiene aquí para que el sonido de resultado suene completo
     public static void StopAllSounds()
     {
-        instance.audioSource.Stop();
-        instance.chargeLoopSource.Stop();
-        instance.criticalLoopSource.Stop();
+        if (instance == null) return;
+        if (instance.audioSource != null)      instance.audioSource.Stop();
+        if (instance.chargeLoopSource != null)  instance.chargeLoopSource.Stop();
+        if (instance.criticalLoopSource != null) instance.criticalLoopSource.Stop();
     }
 
     // Recupera la duración del clip más largo
     public static float GetClipLength(SoundType sound)
     {
+        if (instance == null) return 0f;
         SoundList soundList = instance.SO.sounds[(int)sound];
         if (soundList.sounds == null || soundList.sounds.Length == 0) return 0f;
         float maxLength = 0f;
