@@ -28,6 +28,7 @@ public class MainMenu : MonoBehaviour
         navigator.OnConfirmPressed += OnConfirmPressed;
     }
 
+    //Se enarga de manejar el input del teclado
     private void Update()
     {
         bool isStarting = readySequence.IsRunning;
@@ -36,7 +37,6 @@ public class MainMenu : MonoBehaviour
         nameInput.SetBlocked(isStarting);
         navigator.SetBlocked(isStarting);
 
-        // Enter desde teclado solo si no está iniciando
         if (!isStarting && Keyboard.current != null &&
             Keyboard.current.enterKey.wasPressedThisFrame)
         {
@@ -52,6 +52,7 @@ public class MainMenu : MonoBehaviour
         );
     }
 
+    //Módulo de Confirmación  
     private void OnConfirmPressed()
     {
         if (navigator.SelectedOption == 0)
@@ -60,6 +61,7 @@ public class MainMenu : MonoBehaviour
             QuitGame();
     }
 
+    //Módulo de empezar el juego
     private void StartGame()
     {
         if (!nameInput.IsValid())
@@ -80,6 +82,7 @@ public class MainMenu : MonoBehaviour
         readySequence.Begin(gameSceneName);
     }
 
+    //Módulo de salir del juego
     private void QuitGame()
     {
         Debug.Log("Saliendo del juego.");

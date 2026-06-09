@@ -18,6 +18,7 @@ public class PlayerNameInput : MonoBehaviour
         isBlocked = blocked;
     }
 
+    //Manejo de inputs de teclado
     private void Update()
     {
         if (isBlocked) return;
@@ -69,6 +70,7 @@ public class PlayerNameInput : MonoBehaviour
         return true;
     }
 
+//Valores aceptados
     private string KeyToChar(Key key)
     {
         bool shift = Keyboard.current.shiftKey.isPressed;
