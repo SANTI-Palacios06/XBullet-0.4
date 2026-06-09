@@ -19,6 +19,9 @@ public class PinballScoreManager : MonoBehaviour
     [Tooltip("Puntos por cada proyectil enemigo destruido.")]
     [SerializeField] private int enemyProjectilePoints = 50;
 
+    [Tooltip("Puntos por cada rebote en un bumper.")]
+    [SerializeField] private int bumperPoints = 100;
+
     [Tooltip("Puntos bonus por cada vida restante del jugador al finalizar.")]
     [SerializeField] private int bonusPerLife = 2000;
 
@@ -93,6 +96,7 @@ public class PinballScoreManager : MonoBehaviour
 
         ScoreChanged?.Invoke();
     }
+
     // Busca la vida del jugador para registrar los puntos extras de la vida del jugador
     private bool TryFindPlayerHealth()
     {
@@ -125,7 +129,7 @@ public class PinballScoreManager : MonoBehaviour
             }
         }
 
-        //ignorar, es una advetencia menor
+        //ignorar, es una advertencia menor
         CombatHealth[] allHealths = FindObjectsByType<CombatHealth>(
             FindObjectsInactive.Include,
             FindObjectsSortMode.None
@@ -161,6 +165,12 @@ public class PinballScoreManager : MonoBehaviour
         AddScore(enemyProjectilePoints, "enemy_projectile_destroyed");
     }
 
+    //Registra el rebote en el bumper
+    public void RegisterBumperBounce()
+    {
+        AddScore(bumperPoints, "bumper_bounce");
+    }
+
     //Publica los puntos del score
     private void AddScore(int points, string eventType)
     {
@@ -176,7 +186,6 @@ public class PinballScoreManager : MonoBehaviour
 
         ScoreChanged?.Invoke();
     }
-
 
     //estado donde el enemigo muere
     private void OnEnemyDied(CombatHealth deadEnemy)
@@ -213,7 +222,7 @@ public class PinballScoreManager : MonoBehaviour
         FinishSession(false);
     }
 
-//Seccion terminada y cuenta puntos extra de salud del jugador
+    //Seccion terminada y cuenta puntos extra de salud del jugador
     private void FinishSession(bool victory)
     {
         if (sessionClosed)
