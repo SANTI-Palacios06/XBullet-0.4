@@ -36,11 +36,14 @@ public class PinballScoreManager : MonoBehaviour
     private CombatHealth enemyHealth;
     private bool sessionClosed;
 
+    // Nombre del jugador cargado desde PlayerPrefs, Dummy si no existe
+    private string playerName = "Dummy";
+
     public static PinballScoreManager Instance { get; private set; }
 
     public event Action ScoreChanged;
 
-    public int CurrentScore => currentScore;
+    public int CurrentScore   => currentScore;
     public bool SessionClosed => sessionClosed;
 
     private void Awake()
@@ -56,6 +59,12 @@ public class PinballScoreManager : MonoBehaviour
 
     private void Start()
     {
+        // Carga el nombre guardado desde el menú, usa Dummy si no existe o está vacío
+        string savedName = PlayerPrefs.GetString("PlayerName", "Dummy");
+        playerName = string.IsNullOrWhiteSpace(savedName) ? "Dummy" : savedName.Trim();
+
+        Debug.Log($"PinballScoreManager — Jugador cargado: '{playerName}'");
+
         if (playerHealth == null)
         {
             TryFindPlayerHealth();
@@ -67,10 +76,9 @@ public class PinballScoreManager : MonoBehaviour
     {
         UnsubscribeHealthEvents();
 
-        playerHealth = newPlayerHealth;
-        enemyHealth = newEnemyHealth;
-
-        currentScore = 0;
+        playerHealth  = newPlayerHealth;
+        enemyHealth   = newEnemyHealth;
+        currentScore  = 0;
         sessionClosed = false;
 
         if (playerHealth != null)
@@ -199,7 +207,7 @@ public class PinballScoreManager : MonoBehaviour
         NotifyPlayerDefeated(deadPlayer);
     }
 
-    //Notificacion del enemigo derrotado 
+    //Notificacion del enemigo derrotado
     public void NotifyEnemyDefeated(CombatHealth deadEnemy)
     {
         if (sessionClosed)
@@ -230,6 +238,13 @@ public class PinballScoreManager : MonoBehaviour
             return;
         }
 
+        // Re-lee el nombre por si no se cargó correctamente en Start
+        if (playerName == "Dummy" || string.IsNullOrWhiteSpace(playerName))
+        {
+            string savedName = PlayerPrefs.GetString("PlayerName", "Dummy");
+            playerName = string.IsNullOrWhiteSpace(savedName) ? "Dummy" : savedName.Trim();
+        }
+
         if (victory)
         {
             if (playerHealth == null)
@@ -240,7 +255,7 @@ public class PinballScoreManager : MonoBehaviour
             if (playerHealth != null)
             {
                 int livesRemaining = Mathf.Max(0, playerHealth.CurrentHealth);
-                int lifeBonus = livesRemaining * bonusPerLife;
+                int lifeBonus      = livesRemaining * bonusPerLife;
 
                 currentScore += lifeBonus;
 
@@ -250,8 +265,11 @@ public class PinballScoreManager : MonoBehaviour
 
         sessionClosed = true;
 
+        string resultLabel = victory ? "VICTORIA" : "DERROTA";
+
         Debug.Log("=============================");
-        Debug.Log($"SCORE FINAL: {currentScore}");
+        Debug.Log($"{resultLabel}");
+        Debug.Log($"El score del jugador {playerName} es de {currentScore}");
         Debug.Log("=============================");
 
         ScoreChanged?.Invoke();
