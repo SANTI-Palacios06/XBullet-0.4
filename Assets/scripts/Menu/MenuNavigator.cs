@@ -20,6 +20,7 @@ public class MenuNavigator : MonoBehaviour
         isBlocked = blocked;
     }
 
+    //Manejo de la activacicon Navegacion 
     private void OnEnable()
     {
         if (navigateAction != null)
@@ -35,6 +36,7 @@ public class MenuNavigator : MonoBehaviour
         }
     }
 
+    //Manejo la desactivacion Navegacion 
     private void OnDisable()
     {
         if (navigateAction != null)
@@ -56,6 +58,7 @@ public class MenuNavigator : MonoBehaviour
             navCooldown -= Time.deltaTime;
     }
 
+    //Maneja los inputs de la nevagaccion
     private void OnNavigate(InputAction.CallbackContext ctx)
     {
         if (isBlocked) return;

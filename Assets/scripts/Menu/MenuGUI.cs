@@ -18,6 +18,7 @@ public class MenuGUI : MonoBehaviour
         readyText      = ready;
     }
 
+    //Modulo de UI del menu, usa GUIStyle para crear la UI del Menu
     private void OnGUI()
     {
         float w = Screen.width;
