@@ -39,6 +39,12 @@ public class PinballScoreManager : MonoBehaviour
     // Nombre del jugador cargado desde PlayerPrefs, Dummy si no existe
     private string playerName = "Dummy";
 
+    // Contador de golpes al jefe para reportar al servidor
+    private int bossHitCount = 0;
+
+    // Cliente de score para comunicación con el servidor
+    private ScoreServiceClient scoreClient;
+
     public static PinballScoreManager Instance { get; private set; }
 
     public event Action ScoreChanged;
@@ -65,6 +71,13 @@ public class PinballScoreManager : MonoBehaviour
 
         Debug.Log($"PinballScoreManager — Jugador cargado: '{playerName}'");
 
+        // Busca el cliente de score e inicia la sesión en el servidor
+        scoreClient = ScoreServiceClient.Instance;
+        if (scoreClient != null)
+            scoreClient.BeginSession(playerName, "X-Bullet Pinball", 10);
+        else
+            Debug.LogWarning("PinballScoreManager — ScoreServiceClient no encontrado.");
+
         if (playerHealth == null)
         {
             TryFindPlayerHealth();
@@ -80,6 +93,7 @@ public class PinballScoreManager : MonoBehaviour
         enemyHealth   = newEnemyHealth;
         currentScore  = 0;
         sessionClosed = false;
+        bossHitCount  = 0;
 
         if (playerHealth != null)
         {
@@ -164,6 +178,7 @@ public class PinballScoreManager : MonoBehaviour
     //Se registro el golpe del jefe
     public void RegisterBossHit()
     {
+        bossHitCount++;
         AddScore(bossHitPoints, "boss_hit");
     }
 
@@ -191,6 +206,10 @@ public class PinballScoreManager : MonoBehaviour
         currentScore += safePoints;
 
         Debug.Log($"Score +{safePoints} | Evento={eventType} | Total={currentScore}");
+
+        // Reporta el evento al servidor
+        if (scoreClient != null)
+            scoreClient.ReportEvent(eventType, safePoints, currentScore, playerName, bossHitCount, false);
 
         ScoreChanged?.Invoke();
     }
@@ -271,6 +290,10 @@ public class PinballScoreManager : MonoBehaviour
         Debug.Log($"{resultLabel}");
         Debug.Log($"El score del jugador {playerName} es de {currentScore}");
         Debug.Log("=============================");
+
+        // Cierra la sesión en el servidor
+        if (scoreClient != null)
+            scoreClient.CompleteSession(currentScore, victory, victory ? "boss_defeated" : "player_dead", bossHitCount);
 
         ScoreChanged?.Invoke();
     }
