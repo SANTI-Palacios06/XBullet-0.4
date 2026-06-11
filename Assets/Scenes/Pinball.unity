@@ -2573,6 +2573,7 @@ MonoBehaviour:
   bumperPoints: 100
   bonusPerLife: 2000
   playerTag: Player
+  menuSceneName: Menu
   currentScore: 0
 --- !u!4 &244070504
 Transform:
@@ -3293,6 +3294,10 @@ PrefabInstance:
     - target: {fileID: 119425567929450725, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 546432194626952533, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
+      propertyPath: pushForce
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1725927370885314779, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_LocalScale.x
@@ -5806,7 +5811,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1395925076716476844, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: maxHealth
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1395925076716476844, guid: 927df87ca21de9947be35ae74575838a, type: 3}
       propertyPath: quitOnDeath
@@ -9661,6 +9666,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 546432194626952533, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
+      propertyPath: pushForce
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1725927370885314779, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1801686
@@ -11248,7 +11257,7 @@ MonoBehaviour:
   activeAngle: -30
   rotationSpeed: 720
   launchSpeed: 40
-  massMultiplier: 2
+  massMultiplier: 3
   flipperAction: {fileID: 5538420199033093968, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
 --- !u!54 &1411347109
 Rigidbody:
@@ -12455,7 +12464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.15
+      value: -33.26
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12463,7 +12472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.65
+      value: 17.62
       objectReference: {fileID: 0}
     - target: {fileID: 3565878496409580650, guid: c7750d935c1c67c4989a8ebe26c4e595, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13627,6 +13636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   SO: {fileID: 11400000, guid: 9112605bf3b5aac449020832d6d4068f, type: 2}
   chargeLoopStart: 2
+  menuSceneName: Menu
 --- !u!82 &1756013318
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14565,7 +14575,7 @@ MonoBehaviour:
   activeAngle: 200
   rotationSpeed: 720
   launchSpeed: 40
-  massMultiplier: 2
+  massMultiplier: 3
   flipperAction: {fileID: -1321325182380505046, guid: 360c6ba870464834baf6dd32f9bc7c0a, type: 3}
 --- !u!54 &1880895924
 Rigidbody:
