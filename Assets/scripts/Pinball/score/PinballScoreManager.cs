@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// Orquesta el puntaje del modo pinball.
 /// Centraliza el score para que bumpers, palancas, pelota y fin de partida
@@ -28,6 +30,10 @@ public class PinballScoreManager : MonoBehaviour
     [Header("Autobúsqueda")]
     [Tooltip("Tag del jugador. El objeto con este tag debe tener CombatHealth.")]
     [SerializeField] private string playerTag = "Player";
+
+    [Header("Escenas")]
+    [Tooltip("Nombre exacto de la escena del menú.")]
+    [SerializeField] private string menuSceneName = "Menu";
 
     [Header("Sesión")]
     [SerializeField] private int currentScore;
@@ -291,11 +297,22 @@ public class PinballScoreManager : MonoBehaviour
         Debug.Log($"El score del jugador {playerName} es de {currentScore}");
         Debug.Log("=============================");
 
-        // Cierra la sesión en el servidor
+        ScoreChanged?.Invoke();
+
+        // Guarda en el servidor en paralelo
         if (scoreClient != null)
             scoreClient.CompleteSession(currentScore, victory, victory ? "boss_defeated" : "player_dead", bossHitCount);
 
-        ScoreChanged?.Invoke();
+        // Espera a que termine el audio de resultado antes de cargar el menú
+        float audioDelay = SoundManager.GetClipLength(victory ? SoundType.victory : SoundType.defeat);
+        StartCoroutine(LoadMenuAfterDelay(audioDelay));
+    }
+
+    // Espera a que termine el audio y carga el menú
+    private IEnumerator LoadMenuAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(menuSceneName);
     }
 
     private void OnDestroy()

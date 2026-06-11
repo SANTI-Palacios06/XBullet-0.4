@@ -1453,8 +1453,8 @@ BoxCollider:
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0693222, y: 1, z: 1}
+  m_Center: {x: -0.034661017, y: -9.941183e-10, z: 1.0412238e-10}
 --- !u!23 &227863014
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6031,6 +6031,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 546432194626952533, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
+      propertyPath: pushForce
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1725927370885314779, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1801686
@@ -7528,6 +7532,10 @@ PrefabInstance:
     - target: {fileID: 119425567929450725, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 546432194626952533, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
+      propertyPath: pushForce
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1725927370885314779, guid: 84daa73daaa806a449f45fdc74c5be5f, type: 3}
       propertyPath: m_LocalScale.x

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 //Especifica los tipos de sonido que va a tener el juego
 public enum SoundType
@@ -35,6 +36,10 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundSO SO;
     [SerializeField] private float chargeLoopStart = 2f;
+
+    [Tooltip("Nombre exacto de la escena del menú.")]
+    [SerializeField] private string menuSceneName = "Menu";
+
     private static SoundManager instance = null;
     private AudioSource audioSource;
     private AudioSource chargeLoopSource;
@@ -72,6 +77,29 @@ public class SoundManager : MonoBehaviour
             criticalLoopSource.spatialBlend = 0f;
             criticalLoopSource.playOnAwake  = false;
             criticalLoopSource.loop         = true;
+        }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // Resetea el flag de resultado solo al cargar la escena del menú
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == menuSceneName)
+        {
+            resultPlaying = false;
+            if (instance != null && instance.audioSource != null)
+                instance.audioSource.Stop();
+            if (instance != null && instance.resultSource != null)
+                instance.resultSource.Stop();
         }
     }
 
@@ -146,7 +174,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Inicia el sonido de carga desde el inicio 
+    // Inicia el sonido de carga desde el inicio
     public static void StartChargeSound()
     {
         if (instance == null || instance.chargeLoopSource == null) return;
@@ -188,13 +216,13 @@ public class SoundManager : MonoBehaviour
         instance.criticalLoopSource.Stop();
     }
 
-    //Corte abrupto de todos los efectos de sonido al ser llamado
+    // Corte abrupto de todos los efectos de sonido al ser llamado
     // resultSource NO se detiene aquí para que el sonido de resultado suene completo
     public static void StopAllSounds()
     {
         if (instance == null) return;
-        if (instance.audioSource != null)      instance.audioSource.Stop();
-        if (instance.chargeLoopSource != null)  instance.chargeLoopSource.Stop();
+        if (instance.audioSource != null)       instance.audioSource.Stop();
+        if (instance.chargeLoopSource != null)   instance.chargeLoopSource.Stop();
         if (instance.criticalLoopSource != null) instance.criticalLoopSource.Stop();
     }
 

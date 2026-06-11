@@ -86,14 +86,18 @@ public class ScoreServiceClient : MonoBehaviour
             Debug.LogWarning($"Error al reportar evento: {request.error}");
     }
 
-    /// Cierra la sesión con el score final
-    public void CompleteSession(int finalScore, bool victory, string reason, int bossHits)
+    /// Cierra la sesión con el score final y llama al callback cuando termina
+    public void CompleteSession(int finalScore, bool victory, string reason, int bossHits, Action onCompleted = null)
     {
-        if (!sessionActive || string.IsNullOrEmpty(sessionId)) return;
-        StartCoroutine(CompleteSessionCoroutine(finalScore, victory, reason, bossHits));
+        if (!sessionActive || string.IsNullOrEmpty(sessionId))
+        {
+            onCompleted?.Invoke();
+            return;
+        }
+        StartCoroutine(CompleteSessionCoroutine(finalScore, victory, reason, bossHits, onCompleted));
     }
 
-    private IEnumerator CompleteSessionCoroutine(int finalScore, bool victory, string reason, int bossHits)
+    private IEnumerator CompleteSessionCoroutine(int finalScore, bool victory, string reason, int bossHits, Action onCompleted)
     {
         string json = $"{{\"finalScore\":{finalScore},\"victory\":{victory.ToString().ToLower()},\"reason\":\"{reason}\",\"bossHits\":{bossHits}}}";
 
@@ -106,14 +110,15 @@ public class ScoreServiceClient : MonoBehaviour
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
-        {
             Debug.Log($"Sesión completada. Victoria={victory} | Score final={finalScore}");
-            sessionActive = false;
-        }
         else
-        {
             Debug.LogWarning($"Error al completar sesión: {request.error}");
-        }
+
+        sessionActive = false;
+        sessionId     = "";
+
+        // Siempre regresa al menú aunque falle el servidor
+        onCompleted?.Invoke();
     }
 
     /// Verifica la conexión con el servidor
@@ -139,7 +144,7 @@ public class ScoreServiceClient : MonoBehaviour
         if (sessionActive && !string.IsNullOrEmpty(sessionId))
         {
             Debug.Log("Cierre detectado — cerrando sesión en el servidor.");
-            StartCoroutine(CompleteSessionCoroutine(0, false, "app_quit", 0));
+            StartCoroutine(CompleteSessionCoroutine(0, false, "app_quit", 0, null));
         }
     }
 
@@ -149,7 +154,7 @@ public class ScoreServiceClient : MonoBehaviour
         if (pauseStatus && sessionActive && !string.IsNullOrEmpty(sessionId))
         {
             Debug.Log("Pausa detectada — cerrando sesión en el servidor.");
-            StartCoroutine(CompleteSessionCoroutine(0, false, "app_pause", 0));
+            StartCoroutine(CompleteSessionCoroutine(0, false, "app_pause", 0, null));
         }
     }
 
