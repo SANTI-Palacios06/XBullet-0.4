@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// Orquesta el menú principal conectando todos los módulos.
 [RequireComponent(typeof(ReadySequence))]
@@ -12,32 +13,34 @@ public class MainMenu : MonoBehaviour
     [Tooltip("Nombre exacto de la escena del juego.")]
     [SerializeField] private string gameSceneName = "Pinball";
 
-    private ReadySequence   readySequence;
+    [Tooltip("Nombre exacto de la escena del leaderboard.")]
+    [SerializeField] private string leaderboardSceneName = "LeaderboardScene";
+
+    private ReadySequence readySequence;
     private PlayerNameInput nameInput;
-    private MenuNavigator   navigator;
-    private MenuGUI         gui;
-    private bool            nombreInvalido = false;
+    private MenuNavigator navigator;
+    private MenuGUI gui;
+    private bool nombreInvalido = false;
 
     private void Awake()
     {
         readySequence = GetComponent<ReadySequence>();
-        nameInput     = GetComponent<PlayerNameInput>();
-        navigator     = GetComponent<MenuNavigator>();
-        gui           = GetComponent<MenuGUI>();
+        nameInput = GetComponent<PlayerNameInput>();
+        navigator = GetComponent<MenuNavigator>();
+        gui = GetComponent<MenuGUI>();
 
         navigator.OnConfirmPressed += OnConfirmPressed;
     }
 
-    //Se enarga de manejar el input del teclado
     private void Update()
     {
         bool isStarting = readySequence.IsRunning;
 
-        // Bloquea input durante Ready GO
         nameInput.SetBlocked(isStarting);
         navigator.SetBlocked(isStarting);
 
-        if (!isStarting && Keyboard.current != null &&
+        if (!isStarting &&
+            Keyboard.current != null &&
             Keyboard.current.enterKey.wasPressedThisFrame)
         {
             OnConfirmPressed();
@@ -52,16 +55,33 @@ public class MainMenu : MonoBehaviour
         );
     }
 
-    //Módulo de Confirmación  
     private void OnConfirmPressed()
     {
-        if (navigator.SelectedOption == 0)
-            StartGame();
-        else
-            QuitGame();
+        if (readySequence.IsRunning)
+        {
+            return;
+        }
+
+        switch (navigator.SelectedOption)
+        {
+            case 0:
+                StartGame();
+                break;
+
+            case 1:
+                OpenLeaderboard();
+                break;
+
+            case 2:
+                QuitGame();
+                break;
+
+            default:
+                Debug.LogWarning($"Opción de menú no reconocida: {navigator.SelectedOption}");
+                break;
+        }
     }
 
-    //Módulo de empezar el juego
     private void StartGame()
     {
         if (!nameInput.IsValid())
@@ -72,7 +92,9 @@ public class MainMenu : MonoBehaviour
 
         nombreInvalido = false;
 
-        string finalName = string.IsNullOrWhiteSpace(nameInput.PlayerName) ? "Dummy" : nameInput.PlayerName.Trim();
+        string finalName = string.IsNullOrWhiteSpace(nameInput.PlayerName)
+            ? "Dummy"
+            : nameInput.PlayerName.Trim();
 
         PlayerPrefs.SetString("PlayerName", finalName);
         PlayerPrefs.Save();
@@ -82,13 +104,32 @@ public class MainMenu : MonoBehaviour
         readySequence.Begin(gameSceneName);
     }
 
-    //Módulo de salir del juego
+    private void OpenLeaderboard()
+    {
+        nombreInvalido = false;
+
+        Debug.Log($"Abriendo leaderboard: {leaderboardSceneName}");
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(leaderboardSceneName);
+    }
+
     private void QuitGame()
     {
         Debug.Log("Saliendo del juego.");
+
         Application.Quit();
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
+    }
+
+    private void OnDestroy()
+    {
+        if (navigator != null)
+        {
+            navigator.OnConfirmPressed -= OnConfirmPressed;
+        }
     }
 }
