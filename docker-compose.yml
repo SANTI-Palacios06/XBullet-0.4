@@ -1,0 +1,17 @@
+services:
+  xbullet-score-server:
+    build:
+      context: ./backend/XBullet.ScoreService
+      dockerfile: Dockerfile
+    container_name: xbullet-score-server
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      SCORE_DATA_DIR: /app/data
+    volumes:
+      - xbullet_score_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  xbullet_score_data:

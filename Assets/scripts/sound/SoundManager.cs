@@ -1,149 +1,429 @@
-using System;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
-//Especifica los tipos de sonido que va a tener el juego
 public enum SoundType
 {
     shoot,
     chargeShoot,
     criticalHealth,
     victory,
-    defeat
+    defeat,
+    flipperHit,
+    bumperHit
 }
 
-//Se encarga de leer la lista de efectos de sonido
-[Serializable]
-public struct SoundList
-{
-    [HideInInspector] public string name;
-    [Range(0, 1)] public float volume;
-    public AudioMixerGroup mixer;
-    public AudioClip[] sounds;
-}
-//administra el sound SO
-[CreateAssetMenu(menuName = "Sounds SO", fileName = "Sounds SO")]
-public class SoundSO : ScriptableObject
-{
-    public SoundList[] sounds;
-}
-
-//Revisa las fuente de los audios del SoundSO
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField] private SoundSO SO;
+    [Header("Disparo")]
+    [SerializeField] private AudioClip shootClip;
+    [SerializeField] private AudioMixerGroup shootMixer;
+    [SerializeField][Range(0f, 1f)] private float shootVolume = 1f;
+
+    [Header("Disparo cargado")]
+    [SerializeField] private AudioClip chargeShootClip;
+    [SerializeField] private AudioMixerGroup chargeShootMixer;
+    [SerializeField][Range(0f, 1f)] private float chargeShootVolume = 1f;
+
+    [Header("Salud crítica")]
+    [SerializeField] private AudioClip criticalHealthClip;
+    [SerializeField] private AudioMixerGroup criticalHealthMixer;
+    [SerializeField][Range(0f, 1f)] private float criticalHealthVolume = 1f;
+
+    [Header("Victoria")]
+    [SerializeField] private AudioClip victoryClip;
+    [SerializeField] private AudioMixerGroup victoryMixer;
+    [SerializeField][Range(0f, 1f)] private float victoryVolume = 1f;
+
+    [Header("Derrota")]
+    [SerializeField] private AudioClip defeatClip1;
+    [SerializeField] private AudioClip defeatClip2;
+    [SerializeField] private AudioMixerGroup defeatMixer;
+    [SerializeField][Range(0f, 1f)] private float defeatVolume = 1f;
+
+    [Header("Flipper")]
+    [SerializeField] private AudioClip flipperHitClip;
+    [SerializeField] private AudioMixerGroup flipperHitMixer;
+    [SerializeField][Range(0f, 1f)] private float flipperHitVolume = 1f;
+
+    [Header("Bumper")]
+    [SerializeField] private AudioClip bumperHitClip;
+    [SerializeField] private AudioMixerGroup bumperHitMixer;
+    [SerializeField][Range(0f, 1f)] private float bumperHitVolume = 1f;
+
+    [Header("Configuración")]
     [SerializeField] private float chargeLoopStart = 2f;
-    private static SoundManager instance = null;
+    [SerializeField] private string menuSceneName = "Menu";
+    [SerializeField] private string leaderboardSceneName = "LeaderboardScene";
+
+    private static SoundManager instance;
+
     private AudioSource audioSource;
     private AudioSource chargeLoopSource;
     private AudioSource resultSource;
+    private AudioSource resultSource2;
+    private AudioSource criticalLoopSource;
+    private AudioSource flipperSource;
+    private AudioSource bumperSource;
+
+    private static bool resultPlaying = false;
 
     private void Awake()
     {
-        if (!instance)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            audioSource = GetComponent<AudioSource>();
-            audioSource.spatialBlend = 0f;
-            audioSource.playOnAwake  = false;
-            audioSource.loop         = false;
-
-            chargeLoopSource = gameObject.AddComponent<AudioSource>();
-            chargeLoopSource.spatialBlend = 0f;
-            chargeLoopSource.playOnAwake  = false;
-            chargeLoopSource.loop         = false;
-
-            // AudioSource dedicado para victoria y derrota, no se solapa con el principal
-            resultSource = gameObject.AddComponent<AudioSource>();
-            resultSource.spatialBlend = 0f;
-            resultSource.playOnAwake  = false;
-            resultSource.loop         = false;
+            Destroy(gameObject);
+            return;
         }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        audioSource = GetComponent<AudioSource>();
+        ConfigureSource(audioSource, false);
+
+        chargeLoopSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(chargeLoopSource, false);
+
+        resultSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(resultSource, false);
+
+        resultSource2 = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(resultSource2, false);
+
+        criticalLoopSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(criticalLoopSource, true);
+
+        flipperSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(flipperSource, false);
+
+        bumperSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSource(bumperSource, false);
+
+        Debug.Log("SoundManager listo sin SoundSO.");
     }
 
-    // Gestiona el loop manual al llegar al final vuelve a chargeLoopStart
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void Update()
     {
+        if (chargeLoopSource == null)
+        {
+            return;
+        }
+
         if (chargeLoopSource.isPlaying &&
+            chargeLoopSource.clip != null &&
             chargeLoopSource.time >= chargeLoopSource.clip.length - 0.05f)
         {
-            chargeLoopSource.time = chargeLoopStart;
+            chargeLoopSource.time = Mathf.Clamp(chargeLoopStart, 0f, chargeLoopSource.clip.length);
         }
     }
 
-    // Reproduce un sonido del SO para cualquier sonido anterior para evitar solapamiento
-    public static void PlaySound(SoundType sound, AudioSource source = null, float volume = 1)
+    private static void ConfigureSource(AudioSource source, bool loop)
     {
-        SoundList soundList  = instance.SO.sounds[(int)sound];
-        AudioClip[] clips    = soundList.sounds;
-        if (clips == null || clips.Length == 0) return;
-        AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
-
-        if (source)
+        if (source == null)
         {
-            source.Stop();
-            source.outputAudioMixerGroup = soundList.mixer;
-            source.clip   = randomClip;
-            source.volume = volume * soundList.volume;
-            source.Play();
+            return;
         }
-        else
+
+        source.spatialBlend = 0f;
+        source.playOnAwake = false;
+        source.loop = loop;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == menuSceneName || scene.name == leaderboardSceneName)
         {
-            instance.audioSource.Stop();
-            instance.audioSource.outputAudioMixerGroup = soundList.mixer;
-            instance.audioSource.clip   = randomClip;
-            instance.audioSource.volume = volume * soundList.volume;
-            instance.audioSource.Play();
+            resultPlaying = false;
+            StopAllSounds();
+            StopResultSounds();
         }
     }
 
-    // Reproduce soniso de victoria o derrota
+    private static void PlayClip(AudioSource source, AudioClip clip, AudioMixerGroup mixer, float volume)
+    {
+        if (source == null)
+        {
+            Debug.LogWarning("No se puede reproducir sonido porque el AudioSource es null.");
+            return;
+        }
+
+        if (clip == null)
+        {
+            Debug.LogWarning("No se puede reproducir sonido porque el AudioClip no está asignado.");
+            return;
+        }
+
+        source.Stop();
+        source.outputAudioMixerGroup = mixer;
+        source.clip = clip;
+        source.volume = Mathf.Clamp01(volume);
+        source.Play();
+    }
+
+    public static void PlaySound(SoundType sound, AudioSource source = null, float volume = 1f)
+    {
+        if (instance == null)
+        {
+            Debug.LogWarning("No existe SoundManager en la escena.");
+            return;
+        }
+
+        if (resultPlaying)
+        {
+            return;
+        }
+
+        switch (sound)
+        {
+            case SoundType.shoot:
+                PlayClip(
+                    source != null ? source : instance.audioSource,
+                    instance.shootClip,
+                    instance.shootMixer,
+                    volume * instance.shootVolume
+                );
+                break;
+
+            case SoundType.chargeShoot:
+                StartChargeSound();
+                break;
+
+            case SoundType.criticalHealth:
+                StartCriticalSound();
+                break;
+
+            case SoundType.flipperHit:
+                PlayClip(
+                    source != null ? source : instance.flipperSource,
+                    instance.flipperHitClip,
+                    instance.flipperHitMixer,
+                    volume * instance.flipperHitVolume
+                );
+                break;
+
+            case SoundType.bumperHit:
+                PlayClip(
+                    source != null ? source : instance.bumperSource,
+                    instance.bumperHitClip,
+                    instance.bumperHitMixer,
+                    volume * instance.bumperHitVolume
+                );
+                break;
+
+            case SoundType.victory:
+            case SoundType.defeat:
+                PlayResultSound(sound);
+                break;
+        }
+    }
+
     public static void PlayResultSound(SoundType sound)
     {
-        SoundList soundList = instance.SO.sounds[(int)sound];
-        if (soundList.sounds == null || soundList.sounds.Length == 0) return;
+        if (instance == null)
+        {
+            Debug.LogWarning("No existe SoundManager en la escena.");
+            return;
+        }
 
-        instance.resultSource.Stop();
-        instance.resultSource.outputAudioMixerGroup = soundList.mixer;
-        instance.resultSource.clip   = soundList.sounds[0];
-        instance.resultSource.volume = soundList.volume;
-        instance.resultSource.Play();
+        resultPlaying = true;
+        StopAllSounds();
+
+        if (sound == SoundType.victory)
+        {
+            PlayClip(
+                instance.resultSource,
+                instance.victoryClip,
+                instance.victoryMixer,
+                instance.victoryVolume
+            );
+        }
+        else if (sound == SoundType.defeat)
+        {
+            PlayClip(
+                instance.resultSource,
+                instance.defeatClip1,
+                instance.defeatMixer,
+                instance.defeatVolume
+            );
+
+            PlayClip(
+                instance.resultSource2,
+                instance.defeatClip2,
+                instance.defeatMixer,
+                instance.defeatVolume
+            );
+        }
     }
 
-    // Inicia el sonido de carga desde el inicio 
     public static void StartChargeSound()
     {
-        if (instance.chargeLoopSource.isPlaying) return;
-        SoundList soundList = instance.SO.sounds[(int)SoundType.chargeShoot];
-        if (soundList.sounds == null || soundList.sounds.Length == 0) return;
-        instance.chargeLoopSource.outputAudioMixerGroup = soundList.mixer;
-        instance.chargeLoopSource.clip   = soundList.sounds[0];
-        instance.chargeLoopSource.volume = soundList.volume;
-        instance.chargeLoopSource.time   = 0f;
-        instance.chargeLoopSource.Play();
+        if (instance == null || instance.chargeLoopSource == null)
+        {
+            return;
+        }
+
+        if (resultPlaying)
+        {
+            return;
+        }
+
+        if (instance.chargeLoopSource.isPlaying)
+        {
+            return;
+        }
+
+        PlayClip(
+            instance.chargeLoopSource,
+            instance.chargeShootClip,
+            instance.chargeShootMixer,
+            instance.chargeShootVolume
+        );
     }
 
-    // Corta el sonido de carga inmediatamente tras soltar X
     public static void StopChargeSound()
     {
+        if (instance == null || instance.chargeLoopSource == null)
+        {
+            return;
+        }
+
         instance.chargeLoopSource.Stop();
     }
 
-    //Corte abrupto de todos los efectos de sonido al ser llamado
+    public static void StartCriticalSound()
+    {
+        if (instance == null || instance.criticalLoopSource == null)
+        {
+            return;
+        }
+
+        if (resultPlaying)
+        {
+            return;
+        }
+
+        if (instance.criticalLoopSource.isPlaying)
+        {
+            return;
+        }
+
+        PlayClip(
+            instance.criticalLoopSource,
+            instance.criticalHealthClip,
+            instance.criticalHealthMixer,
+            instance.criticalHealthVolume
+        );
+
+        instance.criticalLoopSource.loop = true;
+    }
+
+    public static void StopCriticalSound()
+    {
+        if (instance == null || instance.criticalLoopSource == null)
+        {
+            return;
+        }
+
+        instance.criticalLoopSource.Stop();
+    }
+
     public static void StopAllSounds()
     {
-        instance.audioSource.Stop();
-        instance.chargeLoopSource.Stop();
+        if (instance == null)
+        {
+            return;
+        }
+
+        if (instance.audioSource != null)
+        {
+            instance.audioSource.Stop();
+        }
+
+        if (instance.chargeLoopSource != null)
+        {
+            instance.chargeLoopSource.Stop();
+        }
+
+        if (instance.criticalLoopSource != null)
+        {
+            instance.criticalLoopSource.Stop();
+        }
+
+        if (instance.flipperSource != null)
+        {
+            instance.flipperSource.Stop();
+        }
+
+        if (instance.bumperSource != null)
+        {
+            instance.bumperSource.Stop();
+        }
     }
 
-    // Recuperra la duraccion del clip
+    public static void StopResultSounds()
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        if (instance.resultSource != null)
+        {
+            instance.resultSource.Stop();
+        }
+
+        if (instance.resultSource2 != null)
+        {
+            instance.resultSource2.Stop();
+        }
+    }
+
     public static float GetClipLength(SoundType sound)
     {
-        SoundList soundList = instance.SO.sounds[(int)sound];
-        if (soundList.sounds == null || soundList.sounds.Length == 0) return 0f;
-        return soundList.sounds[0].length;
+        if (instance == null)
+        {
+            return 0f;
+        }
+
+        switch (sound)
+        {
+            case SoundType.shoot:
+                return instance.shootClip != null ? instance.shootClip.length : 0f;
+
+            case SoundType.chargeShoot:
+                return instance.chargeShootClip != null ? instance.chargeShootClip.length : 0f;
+
+            case SoundType.criticalHealth:
+                return instance.criticalHealthClip != null ? instance.criticalHealthClip.length : 0f;
+
+            case SoundType.victory:
+                return instance.victoryClip != null ? instance.victoryClip.length : 0f;
+
+            case SoundType.defeat:
+                float defeat1 = instance.defeatClip1 != null ? instance.defeatClip1.length : 0f;
+                float defeat2 = instance.defeatClip2 != null ? instance.defeatClip2.length : 0f;
+                return Mathf.Max(defeat1, defeat2);
+
+            case SoundType.flipperHit:
+                return instance.flipperHitClip != null ? instance.flipperHitClip.length : 0f;
+
+            case SoundType.bumperHit:
+                return instance.bumperHitClip != null ? instance.bumperHitClip.length : 0f;
+
+            default:
+                return 0f;
+        }
     }
 }
