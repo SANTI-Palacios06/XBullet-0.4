@@ -8,6 +8,10 @@ XBullet es un juego Hell Shooter que combina las mecánicas de pinball en un sol
 
 La pelota de pinball es la única forma de dañar al jefe, mientras que los disparos del jugador permiten defenderse de los ataques enemigos. El proyecto fue desarrollado en Unity como un prototipo jugable que mezcla elementos de Hell Shooter y Pinball.
 
+## Trailer
+
+https://youtu.be/cWhr6nmrgXI
+
 ---
 
 ## Tecnologías utilizadas
@@ -22,6 +26,8 @@ La pelota de pinball es la única forma de dañar al jefe, mientras que los disp
 ---
 
 ## Dependencias
+
+Docker
 
 ### Usuario final
 
