@@ -17,6 +17,7 @@ La pelota de pinball es la única forma de dañar al jefe, mientras que los disp
 * Unity Input System
 * Git
 * GitHub
+* Docker
 
 ---
 
@@ -85,55 +86,25 @@ Al finalizar este paso, el proyecto estará disponible en la computadora y listo
 ![alt text](image.png)
 
 
-#### Paso 2 — Instalar Unity y abrir el proyecto
+#### Paso 2 — Instalar Doecker y abrir el servidor
 
-Se debe descargar Unity Hub desde la página oficial de Unity.
+Instala docker y una vez instalado abre Docker Desktop y espera a que diga "Engine running"
 
-Una vez descargado Unity Hub, se debe instalar la versión más reciente de Unity compatible con el proyecto. Para este proyecto se debe usar la versión:
+![alt text](image-3.png)
 
-Unity 6000.4.8f1
 
-Después de instalar Unity, se debe abrir Unity Hub.
+Abre una terminal en la carpeta del proyecto
 
-Dentro de Unity Hub, seleccionar la opción:
+construye el docker con el siguiente comando
 
-Open → Add project from disk
+docker compose build --no-cache && docker compose up -d
 
-![alt text](image-1.png)
+Debera aparecerte asi, puede tardar un poco
 
-Luego, se debe buscar y seleccionar la carpeta del proyecto que fue clonada desde GitHub.
+![alt text](image-5.png)
 
-La carpeta seleccionada debe ser:
 
-XBullet-0.4
 
-Una vez seleccionada la carpeta, Unity comenzará a importar los Assets del proyecto.
-
-Este proceso puede tardar varios minutos dependiendo del equipo, por lo que se debe esperar hasta que Unity termine de cargar completamente el proyecto.
-
-Al finalizar este paso, el proyecto estará abierto en Unity y listo para ser ejecutado o modificado.
-
-#### Paso 3 — Verificar dependencias
-
-Antes de ejecutar el proyecto, se debe verificar que el equipo tenga instaladas las dependencias necesarias para que el juego funcione correctamente.
-
-Las dependencias requeridas para el usuario final son:
-
-* Visual C++ Redistributable 2019 o superior
-* DirectX 11 o superior
-* Control de Xbox compatible
-
-Visual C++ Redistributable es necesario para que el ejecutable pueda cargar correctamente los componentes requeridos por el sistema.
-
-DirectX 11 o superior es necesario para que el juego pueda mostrar correctamente los gráficos y funcionar con la tarjeta gráfica del equipo.
-
-El control de Xbox compatible es necesario para jugar correctamente, ya que los controles principales del juego están configurados para mando.
-
-En caso de que el juego no inicie correctamente, se debe instalar Visual C++ Redistributable desde Microsoft y verificar que DirectX esté actualizado.
-
-También se recomienda revisar que los drivers de video del equipo estén actualizados para evitar problemas como pantalla negra, errores gráficos o fallos al iniciar el juego.
-
-Al finalizar este paso, el equipo debe contar con las dependencias necesarias para ejecutar XBullet correctamente.
 
 #### Paso 4 — Conectar control y ejecutar el juego
 
@@ -141,20 +112,30 @@ Antes de ejecutar el juego, se debe conectar un control de Xbox compatible al eq
 
 El uso del control de Xbox es obligatorio para jugar correctamente, ya que los controles principales del proyecto están configurados para este tipo de mando.
 
-Una vez conectado el control, se debe abrir el proyecto en Unity.
+Una vez conectado el control deber ir a la carpeta que clonaste y buscar la carpeta juego.
+![alt text](image-4.png)
 
-Dentro del proyecto, se debe seleccionar la escena principal del juego y presionar el botón: Play
-![alt text](image-2.png)
-
-Al presionar Play, el juego comenzará a ejecutarse dentro del editor de Unity y el usuario podrá jugar.
-
-Durante la ejecución, la consola de Unity mostrará el score del jugador y varios datos relacionados con el funcionamiento del proyecto.
-
-Al finalizar este paso, el juego estará corriendo correctamente dentro de Unity.
+Hay selecciona el XBullet.exe y podras jugar
 
 ---
 
 ## Uso básico
+
+### Servidor
+
+  1. Abre Docker Desktop y espera a que diga "Engine running"
+  2. Abre una terminal en la carpeta del proyecto
+  3. Ejecuta: docker compose up -d
+  Comandos útiles:
+  Iniciar servidor   → docker compose up -d
+  Ver logs           → docker compose logs -f
+  Detener servidor   → docker compose down
+  Reconstruir        → docker compose build --no-cache && docker compose up -d
+  Ver leaderboard    → http://localhost:8080/api/leaderboard
+
+NOTA: Los datos se guardan aunque cierres el ordenador.
+      Solo se borran con: docker compose down -v
+
 
 ### Controles
 
@@ -187,6 +168,10 @@ Es la única forma de infligir daño al jefe.
 #### Flippers
 
 Permiten mantener la pelota en juego y dirigirla hacia el jefe.
+
+#### Bumpers 
+
+Enpujan a la pelota
 
 ---
 
