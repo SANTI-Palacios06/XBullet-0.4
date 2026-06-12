@@ -70,6 +70,28 @@
                 },
                 {
                     "name": "",
+                    "id": "add26195-a1a8-49da-a5b1-adb10e1041b5",
+                    "path": "<XInputController>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navagate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fafe194e-7ddf-42f5-a017-b8a64e52c379",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navagate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "fb95ca50-6411-44b0-927b-dff46554ebd4",
                     "path": "<XInputController>/buttonSouth",
                     "interactions": "",

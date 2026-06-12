@@ -7,9 +7,11 @@ public class MenuNavigator : MonoBehaviour
     [SerializeField] private InputActionReference navigateAction;
     [SerializeField] private InputActionReference confirmAction;
 
-    private int   selectedOption = 0; // 0 = Iniciar, 1 = Salir
-    private float navCooldown    = 0f;
-    private bool  isBlocked      = false;
+    private const int TotalOptions = 3;
+
+    private int selectedOption = 0;
+    private float navCooldown = 0f;
+    private bool isBlocked = false;
 
     public int SelectedOption => selectedOption;
 
@@ -20,7 +22,6 @@ public class MenuNavigator : MonoBehaviour
         isBlocked = blocked;
     }
 
-    //Manejo de la activacicon Navegacion 
     private void OnEnable()
     {
         if (navigateAction != null)
@@ -36,7 +37,6 @@ public class MenuNavigator : MonoBehaviour
         }
     }
 
-    //Manejo la desactivacion Navegacion 
     private void OnDisable()
     {
         if (navigateAction != null)
@@ -55,37 +55,82 @@ public class MenuNavigator : MonoBehaviour
     private void Update()
     {
         if (navCooldown > 0f)
+        {
             navCooldown -= Time.deltaTime;
+        }
     }
 
-    //Maneja los inputs de la nevagaccion
     private void OnNavigate(InputAction.CallbackContext ctx)
     {
-        if (isBlocked) return;
-        if (navCooldown > 0f) return;
+        if (isBlocked)
+        {
+            return;
+        }
+
+        if (navCooldown > 0f)
+        {
+            return;
+        }
 
         float value = 0f;
-        try { value = ctx.ReadValue<float>(); }
-        catch { return; }
 
-        if (value > 0.5f)
+        try
         {
-            if (ctx.control.name == "up")
-            {
-                selectedOption = 0;
-                navCooldown    = 0.3f;
-            }
-            else if (ctx.control.name == "down")
-            {
-                selectedOption = 1;
-                navCooldown    = 0.3f;
-            }
+            value = ctx.ReadValue<float>();
         }
+        catch
+        {
+            return;
+        }
+
+        if (value <= 0.5f)
+        {
+            return;
+        }
+
+        if (ctx.control.name == "up")
+        {
+            MoveUp();
+            navCooldown = 0.3f;
+        }
+        else if (ctx.control.name == "down")
+        {
+            MoveDown();
+            navCooldown = 0.3f;
+        }
+    }
+
+    private void MoveUp()
+    {
+        selectedOption--;
+
+        if (selectedOption < 0)
+        {
+            selectedOption = TotalOptions - 1;
+        }
+
+        Debug.Log($"Opción seleccionada: {selectedOption}");
+    }
+
+    private void MoveDown()
+    {
+        selectedOption++;
+
+        if (selectedOption >= TotalOptions)
+        {
+            selectedOption = 0;
+        }
+
+        Debug.Log($"Opción seleccionada: {selectedOption}");
     }
 
     private void OnConfirm(InputAction.CallbackContext ctx)
     {
-        if (isBlocked) return;
+        if (isBlocked)
+        {
+            return;
+        }
+
         OnConfirmPressed?.Invoke();
     }
 }
