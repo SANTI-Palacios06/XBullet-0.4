@@ -64,22 +64,21 @@ public class PinballFlipper : MonoBehaviour
         float nextAngle   = Mathf.MoveTowardsAngle(current, targetAngle, rotationSpeed * Time.fixedDeltaTime);
         rb.MoveRotation(Quaternion.Euler(0f, nextAngle, 0f));
 
-        // Cuando se suelta el botón se permite volver a golpear
+        // Al soltar el botón se permite volver a golpear
         if (!IsPressed())
             hasKicked = false;
     }
 
-    /// Aplica el impulso una sola vez por pulsación y registra score.
-    /// La fuerza se calcula con la masa de la pelota para que
-    /// siempre salga a la misma velocidad sin importar cuánto pese.
-    private void OnCollisionStay(Collision collision)
+    /// Aplica el impulso una sola vez por pulsación y registra score y sonido.
+    /// OnCollisionEnter es el único evento confiable en Rigidbody cinemático.
+    private void OnCollisionEnter(Collision collision)
     {
         if (hasKicked) return;
+        if (!IsPressed()) return;
 
         PinballBall ball   = collision.gameObject.GetComponent<PinballBall>();
         Rigidbody   ballRb = collision.gameObject.GetComponent<Rigidbody>();
-
-        if (ball == null || ballRb == null || !IsPressed()) return;
+        if (ball == null || ballRb == null) return;
 
         hasKicked = true;
 
@@ -92,7 +91,7 @@ public class PinballFlipper : MonoBehaviour
         float   force               = ballRb.mass * launchSpeed * massMultiplier;
         ballRb.AddForce(impulseDirection * force, ForceMode.Impulse);
 
-        // Registra score por impulso del flipper
+        SoundManager.PlaySound(SoundType.flipperHit);
         PinballScoreManager.Instance?.RegisterFlipperImpulse();
 
         Debug.Log($"Flipper golpeó la pelota. Masa: {ballRb.mass} | Fuerza aplicada: {force}");

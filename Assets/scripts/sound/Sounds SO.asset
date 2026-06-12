@@ -39,3 +39,13 @@ MonoBehaviour:
     sounds:
     - {fileID: 8300000, guid: 3b9094ae6911b1040b492538e40a40ce, type: 3}
     - {fileID: 8300000, guid: 3e3ac00f84724ac458ba497368b2e805, type: 3}
+  - name: 
+    volume: 1
+    mixer: {fileID: 0}
+    sounds:
+    - {fileID: 8300000, guid: 2095d683d7a316d4ea89237c23150f90, type: 3}
+  - name: 
+    volume: 1
+    mixer: {fileID: 0}
+    sounds:
+    - {fileID: 8300000, guid: 3697500094da8db4d9b41f62f8f362ae, type: 3}

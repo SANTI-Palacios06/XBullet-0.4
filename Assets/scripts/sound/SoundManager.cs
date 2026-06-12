@@ -10,7 +10,9 @@ public enum SoundType
     chargeShoot,
     criticalHealth,
     victory,
-    defeat
+    defeat,
+    flipperHit,  // Sonido al impulsar la pelota con el flipper
+    bumperHit    // Sonido al golpear la pelota con el bumper
 }
 
 //Se encarga de leer la lista de efectos de sonido
@@ -45,6 +47,8 @@ public class SoundManager : MonoBehaviour
     private AudioSource chargeLoopSource;
     private AudioSource resultSource;
     private AudioSource criticalLoopSource;
+    private AudioSource flipperSource;  // AudioSource dedicado para el flipper
+    private AudioSource bumperSource;   // AudioSource dedicado para el bumper
 
     // Flag para bloquear sonidos mientras suena el resultado
     private static bool resultPlaying = false;
@@ -77,6 +81,18 @@ public class SoundManager : MonoBehaviour
             criticalLoopSource.spatialBlend = 0f;
             criticalLoopSource.playOnAwake  = false;
             criticalLoopSource.loop         = true;
+
+            // AudioSource dedicado para el flipper, evita solaparse con otros efectos
+            flipperSource = gameObject.AddComponent<AudioSource>();
+            flipperSource.spatialBlend = 0f;
+            flipperSource.playOnAwake  = false;
+            flipperSource.loop         = false;
+
+            // AudioSource dedicado para el bumper, permite solapamiento con el flipper
+            bumperSource = gameObject.AddComponent<AudioSource>();
+            bumperSource.spatialBlend = 0f;
+            bumperSource.playOnAwake  = false;
+            bumperSource.loop         = false;
         }
     }
 
@@ -125,6 +141,15 @@ public class SoundManager : MonoBehaviour
         AudioClip[] clips    = soundList.sounds;
         if (clips == null || clips.Length == 0) return;
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
+
+        // Flipper y bumper usan sus AudioSource dedicados para no cortar otros efectos
+        if (source == null)
+        {
+            if (sound == SoundType.flipperHit)
+                source = instance.flipperSource;
+            else if (sound == SoundType.bumperHit)
+                source = instance.bumperSource;
+        }
 
         if (source)
         {
@@ -221,9 +246,11 @@ public class SoundManager : MonoBehaviour
     public static void StopAllSounds()
     {
         if (instance == null) return;
-        if (instance.audioSource != null)       instance.audioSource.Stop();
+        if (instance.audioSource != null)        instance.audioSource.Stop();
         if (instance.chargeLoopSource != null)   instance.chargeLoopSource.Stop();
         if (instance.criticalLoopSource != null) instance.criticalLoopSource.Stop();
+        if (instance.flipperSource != null)      instance.flipperSource.Stop();
+        if (instance.bumperSource != null)       instance.bumperSource.Stop();
     }
 
     // Recupera la duración del clip más largo

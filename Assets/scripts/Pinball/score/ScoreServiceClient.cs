@@ -112,6 +112,7 @@ public class ScoreServiceClient : MonoBehaviour
         StartCoroutine(ReportEventCoroutine(eventType, points, totalScore, sourceName, bossHits, bossDefeated));
     }
 
+    //Mantiene un evento de score activo
     private IEnumerator ReportEventCoroutine(string eventType, int points, int totalScore, string sourceName, int bossHits, bool bossDefeated)
     {
         ScoreEventRequest payload = new ScoreEventRequest
@@ -153,6 +154,7 @@ public class ScoreServiceClient : MonoBehaviour
         StartCoroutine(CompleteSessionCoroutine(finalScore, victory, reason, bossHits, onCompleted));
     }
 
+    //Completa una session activaq de manera exitosa
     private IEnumerator CompleteSessionCoroutine(int finalScore, bool victory, string reason, int bossHits, Action onCompleted)
     {
         FinishSessionRequest payload = new FinishSessionRequest

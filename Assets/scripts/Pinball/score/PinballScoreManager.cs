@@ -80,7 +80,7 @@ public class PinballScoreManager : MonoBehaviour
         // Busca el cliente de score e inicia la sesión en el servidor
         scoreClient = ScoreServiceClient.Instance;
         if (scoreClient != null)
-            scoreClient.BeginSession(playerName, "X-Bullet Pinball", 10);
+            scoreClient.BeginSession(playerName, "X-Bullet Pinball", 3);
         else
             Debug.LogWarning("PinballScoreManager — ScoreServiceClient no encontrado.");
 

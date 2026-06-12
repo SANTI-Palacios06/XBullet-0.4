@@ -29,6 +29,9 @@ public class PinballBumper : MonoBehaviour
         Vector3 pushDirection = (collision.transform.position - transform.position).normalized;
         rb.AddForce(pushDirection * pushForce, ForceMode.VelocityChange);
 
+        // Sonido del bumper al golpear la pelota
+        SoundManager.PlaySound(SoundType.bumperHit);
+
         Debug.Log($"Bumper golpeó la pelota. Fuerza: {pushForce}");
 
         // Registra score
