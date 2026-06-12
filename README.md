@@ -222,4 +222,4 @@ Stormbreath Entertainment
 
 ## Versión
 
-Ver 1.0.0
+Ver 2.0.0
